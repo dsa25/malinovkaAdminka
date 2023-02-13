@@ -1,22 +1,33 @@
 <template>
   <header>
     <div class="row flex items-center py-2">
-      <MyLogo>Админка Малиновка</MyLogo>
+      <router-link to="/">
+        <MyLogo>Админка&nbsp; Малиновка</MyLogo>
+      </router-link>
       <div class="menu ml-auto">
-        <a href="#" class="ml-1">sldkj</a>
-        <a href="#" class="ml-1">sldkj</a>
-        <a href="#" class="ml-1">sldkj</a>
+        <router-link
+          class="ml-1"
+          to="/"
+          :class="{ active: $route.path === '/' }"
+          >Inspects</router-link
+        >
+        <router-link
+          class="ml-1"
+          to="/users"
+          :class="{ active: $route.path === '/users' }"
+          >Users</router-link
+        >
+        <router-link
+          class="ml-1"
+          to="/list"
+          :class="{ active: $route.path === '/list' }"
+          >List</router-link
+        >
       </div>
     </div>
   </header>
 
-  <div class="row">
-    <p class="mt-3">
-      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quod nulla unde,
-      cupiditate explicabo quidem magni dolorum eveniet hic voluptatibus et
-      ipsum accusamus harum labore, ut maiores. Eius ipsa accusamus nostrum.
-    </p>
-  </div>
+  <router-view />
 </template>
 
 <script>

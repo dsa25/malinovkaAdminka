@@ -5,7 +5,8 @@ const { opn } = require("./database/connect")
 const PORT = process.env.PORT || 5000
 // const PORT = process.env.PORT || 80
 // const IP = process.env.IP || "192.168.0.105"
-const IP = process.env.IP || "0.0.0.0"
+// const IP = process.env.IP || "0.0.0.0"
+const IP = process.env.IP || "localhost"
 const mainController = require("./controllers/mainController")
 
 app.register(require("@fastify/cors"))

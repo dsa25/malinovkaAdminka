@@ -28,8 +28,8 @@ export default {
 .logo__text {
   line-height: 1.1;
   padding-top: 1px;
-  width: 80px;
   font-size: 12px;
   color: #6a6e74c7;
+  white-space: pre-line;
 }
 </style>
