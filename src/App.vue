@@ -1,41 +1,24 @@
 <template>
   <header>
     <div class="row flex items-center py-2">
-      <router-link to="/">
-        <MyLogo>Админка&nbsp; Малиновка</MyLogo>
-      </router-link>
-      <div class="menu ml-auto">
-        <router-link
-          class="ml-1"
-          to="/"
-          :class="{ active: $route.path === '/' }"
-          >Inspects</router-link
-        >
-        <router-link
-          class="ml-1"
-          to="/users"
-          :class="{ active: $route.path === '/users' }"
-          >Users</router-link
-        >
-        <router-link
-          class="ml-1"
-          to="/list"
-          :class="{ active: $route.path === '/list' }"
-          >List</router-link
-        >
-      </div>
+      <MyLogo></MyLogo>
+      <MyMenu />
     </div>
   </header>
 
-  <router-view />
+  <div class="py-10">
+    <router-view />
+  </div>
 </template>
 
 <script>
 import MyLogo from "@/components/MyLogo.vue"
+import MyMenu from "@/components/MyMenu.vue"
 
 export default {
   components: {
-    MyLogo
+    MyLogo,
+    MyMenu
   },
   data() {
     return {
@@ -50,4 +33,8 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.menu a.active {
+  color: green;
+}
+</style>

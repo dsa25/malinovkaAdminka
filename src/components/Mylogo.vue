@@ -1,8 +1,10 @@
 <template>
-  <a href="javascript:void(0);" class="logo">
+  <router-link to="/" class="logo">
     <img src="@/assets/logo.png" alt="logo" />
-    <span class="logo__text"><slot></slot></span>
-  </a>
+    <span class="logo__text">
+      <span>Админка</span> <span>Малиновка</span>
+    </span>
+  </router-link>
 </template>
 
 <script>
@@ -30,6 +32,7 @@ export default {
   padding-top: 1px;
   font-size: 12px;
   color: #6a6e74c7;
-  white-space: pre-line;
+  display: flex;
+  flex-direction: column;
 }
 </style>

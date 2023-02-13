@@ -5,7 +5,7 @@ import { createWebHistory, createRouter } from "vue-router"
 import Inspections from "@/pages/Inspections.vue"
 import Users from "@/pages/Users.vue"
 import List from "@/pages/List.vue"
-// import components from "@/components/UI"
+import components from "@/components/UI"
 
 const router = createRouter({
   history: createWebHistory(),
@@ -30,8 +30,8 @@ const router = createRouter({
 
 const app = createApp(App)
 
-// components.forEach((component) => {
-//   app.component(component.name, component)
-// })
+components.forEach((component) => {
+  app.component(component.name, component)
+})
 
 app.use(router).mount("#app")

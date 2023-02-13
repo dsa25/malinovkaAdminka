@@ -14,14 +14,6 @@ const Users = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false
     },
-    post: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    groupDop: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     status: {
       type: DataTypes.INTEGER,
       allowNull: false

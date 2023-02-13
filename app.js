@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 5000
 // const IP = process.env.IP || "192.168.0.105"
 // const IP = process.env.IP || "0.0.0.0"
 const IP = process.env.IP || "localhost"
+const userController = require("./controllers/userController")
 const mainController = require("./controllers/mainController")
 
 app.register(require("@fastify/cors"))
@@ -18,7 +19,10 @@ app.register(require("@fastify/static"), {
 })
 
 app.register((app, opts, done) => {
-  app.post("/users", mainController.getUsers)
+  app.post("/users", userController.getUsers)
+  app.post("/addUser", userController.addUser)
+  app.post("/updateUser", userController.updateUser)
+  app.post("/addAllUser", userController.addAllUser)
 
   app.get("/list/:id", mainController.getInspect)
 

@@ -8,9 +8,9 @@ export default defineConfig({
     outDir: "dist"
   },
   server: {
-    host: true
+    host: true,
+    hmr: true
     // port: 3000,
-    // hmr: true
   },
   resolve: {
     alias: {
