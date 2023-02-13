@@ -12,8 +12,8 @@ app.register(require("@fastify/cors"))
 
 const path = require("path")
 app.register(require("@fastify/static"), {
-  root: path.join(__dirname, "/public"),
-  prefix: "/"
+  root: path.join(__dirname, "/dist"),
+  prefix: ""
 })
 
 app.register((app, opts, done) => {
