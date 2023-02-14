@@ -5,8 +5,8 @@ const { opn } = require("./database/connect")
 const PORT = process.env.PORT || 5000
 // const PORT = process.env.PORT || 80
 // const IP = process.env.IP || "192.168.0.105"
-// const IP = process.env.IP || "0.0.0.0"
-const IP = process.env.IP || "localhost"
+const IP = process.env.IP || "0.0.0.0"
+// const IP = process.env.IP || "localhost"
 const userController = require("./controllers/userController")
 const mainController = require("./controllers/mainController")
 
@@ -15,7 +15,7 @@ app.register(require("@fastify/cors"))
 const path = require("path")
 app.register(require("@fastify/static"), {
   root: path.join(__dirname, "/dist"),
-  prefix: ""
+  prefix: "/"
 })
 
 app.register((app, opts, done) => {
@@ -24,7 +24,14 @@ app.register((app, opts, done) => {
   app.post("/updateUser", userController.updateUser)
   app.post("/addAllUser", userController.addAllUser)
 
-  app.get("/list/:id", mainController.getInspect)
+  // app.get("/list/:id", mainController.getInspect)
+
+  app.get("/users", async (req, reply) => {
+    return reply.sendFile("index.html")
+  })
+  app.get("/list", async (req, reply) => {
+    return reply.sendFile("index.html")
+  })
 
   app.get("/test", async (req, reply) => {
     try {
