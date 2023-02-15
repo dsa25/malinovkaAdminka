@@ -85,9 +85,8 @@ export default {
       fio: "",
       status: -1
     })
-    const { users } = useUsers(5)
-    const { addUser } = useUsers()
-    const { updateUser } = useUsers()
+
+    const { users, addUser, updateUser } = useUsers()
 
     return { users, newUser, addUser, updateUser }
   },

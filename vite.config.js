@@ -9,8 +9,8 @@ export default defineConfig({
   },
   server: {
     host: true,
-    hmr: true
-    // port: 3000,
+    hmr: true,
+    port: 3000
   },
   resolve: {
     alias: {

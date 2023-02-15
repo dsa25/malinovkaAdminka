@@ -7,7 +7,7 @@ class userController {
       let db = await opn()
       let users = await db.all(sql)
       // let users = await db.query(sql)
-      console.log("users", users)
+      // console.log("users", users)
       reply.send(
         JSON.stringify({
           status: 1,

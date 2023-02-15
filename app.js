@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 5000
 const IP = process.env.IP || "0.0.0.0"
 // const IP = process.env.IP || "localhost"
 const userController = require("./controllers/userController")
-const mainController = require("./controllers/mainController")
+const inspectionsController = require("./controllers/inspectionsController")
 
 app.register(require("@fastify/cors"))
 
@@ -18,11 +18,17 @@ app.register(require("@fastify/static"), {
   prefix: "/"
 })
 
+// bodyLimit  8048576  8мб для картинок в base64
+const bLimit = { bodyLimit: 8048576 }
+
 app.register((app, opts, done) => {
   app.post("/users", userController.getUsers)
   app.post("/addUser", userController.addUser)
   app.post("/updateUser", userController.updateUser)
   app.post("/addAllUser", userController.addAllUser)
+
+  app.post("/addInspect", bLimit, inspectionsController.addInspect)
+  app.post("/getInspects", bLimit, inspectionsController.getInspections)
 
   // app.get("/list/:id", mainController.getInspect)
 
