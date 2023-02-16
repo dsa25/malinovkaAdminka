@@ -2,8 +2,8 @@ const { sequelize } = require("./database/connect")
 
 // модели для синхронизации:
 
-const Users = require("./database/users")
-const Inspections = require("./database/inspections")
+// const Users = require("./database/users")
+// const Inspections = require("./database/inspections")
 
 // синхронизация  бд c моделями
 sequelize

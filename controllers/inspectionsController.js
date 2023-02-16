@@ -1,4 +1,5 @@
 let { opn } = require("../database/connect")
+const fs = require("fs").promises
 
 class inspectionsController {
   async getInspections(req, reply) {
@@ -36,15 +37,24 @@ class inspectionsController {
           })
         )
       }
+      if (req.body.srcPhoto) {
+        let base64Image = req.body.srcPhoto.split(";base64,").pop()
+        var pathImg = `./dist/img/${
+          req.body.idList
+        }_${getTime()}_${Date.now()}.jpg`
+        await fs.writeFile(pathImg, base64Image, {
+          encoding: "base64"
+        })
 
-      //   console.log(req.body)
-      //   reply.send(
-      //     JSON.stringify({
-      //       status: 1,
-      //       body: {},
-      //       msg: "return!!!!"
-      //     })
-      //   )
+        // reply.send(
+        //   JSON.stringify({
+        //     status: 0,
+        //     body: {},
+        //     msg: "job photo.."
+        //   })
+        // )
+      }
+
       //   let srcPhoto = JSON.stringify(req.body.srcPhoto)
       let args = [
         req.body.user,
@@ -56,7 +66,7 @@ class inspectionsController {
         req.body.kpDay,
         req.body.kpNight,
         req.body.kpTotal,
-        req.body.srcPhoto,
+        pathImg,
         req.body.notation
       ]
       let sql =
@@ -88,6 +98,18 @@ class inspectionsController {
       console.log(error)
     }
   }
+}
+
+function getTime(type = "dd.mm.yyyy") {
+  let time = new Date()
+  let dd = time.getDate()
+  let mm = time.getMonth() + 1
+  let yy = time.getFullYear().toString()
+  if (mm < 10) mm = "0" + mm
+  if (dd < 10) dd = "0" + dd
+
+  if (type === "yyyy-mm-dd") return `${yy}-${mm}-${dd}`
+  else return `${dd}.${mm}.${yy}`
 }
 
 module.exports = new inspectionsController()

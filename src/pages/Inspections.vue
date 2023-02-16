@@ -2,7 +2,20 @@
   <section>
     <div class="row">
       <h1>inspections ...</h1>
+      <img width="30" src="../../dist/img/logo.png" alt="new_img" />
       <table class="table">
+        <!-- <tr>
+          <td></td>
+          <td><my-input>sdf</my-input></td>
+          <td><my-input>sdf</my-input></td>
+          <td><my-input>sdf</my-input></td>
+          <td><my-input>sdf</my-input></td>
+          <td><my-input>sdf</my-input></td>
+          <td colspan="3"><my-input>sdf</my-input></td>
+          <td></td>
+          <td><my-input>sdf</my-input></td>
+          <td></td>
+        </tr> -->
         <tr>
           <th>№</th>
           <th>Адресс</th>
@@ -10,20 +23,21 @@
           <th>№ ПУ</th>
           <th>Тип ПУ</th>
           <th>Дата ПУ</th>
-          <th>
+          <th colspan="3">
             <table class="tbl_poc">
               <tr>
                 <td colspan="3">Показания</td>
               </tr>
               <tr>
-                <td class="w-1/3">КП День</td>
-                <td class="w-1/3">КП Ночи</td>
-                <td class="w-1/3">Общие</td>
+                <td class="w-[60px]">КП День</td>
+                <td class="w-[60px]">КП Ночи</td>
+                <td class="w-[60px]">Общие</td>
               </tr>
             </table>
           </th>
           <th>фото</th>
           <th>user</th>
+          <th>notes</th>
         </tr>
         <tr v-for="(item, index) in inspections" :key="item.id">
           <td>{{ index }}</td>
@@ -32,16 +46,9 @@
           <td>{{ item.numberPU }}</td>
           <td>{{ item.typePU }}</td>
           <td>{{ item.datePU }}</td>
-          <td>
-            <table class="tbl_poc">
-              <tr>
-                <td class="w-1/3">{{ item.kpDay }}</td>
-                <td class="w-1/3">{{ item.kpNight }}</td>
-                <td class="w-1/3">{{ item.kpTotal }}</td>
-              </tr>
-            </table>
-          </td>
-
+          <td class="w-[60px]">{{ item.kpDay }}</td>
+          <td class="w-[60px]">{{ item.kpNight }}</td>
+          <td class="w-[60px]">{{ item.kpTotal }}</td>
           <td>
             <img
               style="width: 80px; height: auto"
@@ -50,9 +57,10 @@
             />
           </td>
           <td>{{ item.user }}</td>
+          <td>{{ item.notation }}</td>
         </tr>
         <tr v-if="inspections.length == 0">
-          <td>not data</td>
+          <td colspan="12" class="py-3">not data</td>
         </tr>
       </table>
     </div>
@@ -62,7 +70,9 @@
 <script>
 import { ref } from "vue"
 import useInspections from "@/hooks/useInspections"
+import MyInput from "../components/UI/MyInput.vue"
 export default {
+  components: { MyInput },
   name: "Inspections",
   setup(props) {
     const { inspections } = useInspections()
@@ -77,6 +87,7 @@ export default {
   width: 100%;
   /* border: 1px solid gray; */
   text-align: center;
+  font-size: 14px;
 }
 .table th {
   text-align: center;
@@ -85,7 +96,12 @@ export default {
 .table > tr > td {
   border: 1px solid #89b289;
 }
+.tbl_poc td {
+  padding: 0 3px;
+}
 .tbl_poc {
   width: 100%;
+  white-space: nowrap;
+  font-size: 13px;
 }
 </style>
