@@ -2,7 +2,7 @@
   <section>
     <div class="row">
       <h1>inspections ...</h1>
-      <img width="30" src="../../dist/img/logo.png" alt="new_img" />
+      <!-- <img width="30" src="../../dist/img/logo.png" alt="new_img" /> -->
       <table class="table">
         <!-- <tr>
           <td></td>
@@ -82,26 +82,4 @@ export default {
 }
 </script>
 
-<style>
-.table {
-  width: 100%;
-  /* border: 1px solid gray; */
-  text-align: center;
-  font-size: 14px;
-}
-.table th {
-  text-align: center;
-}
-.table > tr > th,
-.table > tr > td {
-  border: 1px solid #89b289;
-}
-.tbl_poc td {
-  padding: 0 3px;
-}
-.tbl_poc {
-  width: 100%;
-  white-space: nowrap;
-  font-size: 13px;
-}
-</style>
+<style></style>

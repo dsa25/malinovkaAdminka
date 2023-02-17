@@ -2,7 +2,7 @@ const { sequelize } = require("./connect")
 const { Sequelize, DataTypes } = require("sequelize")
 
 const Inspections = sequelize.define(
-  "inspections",
+  "Inspections",
   {
     id: {
       type: DataTypes.INTEGER,

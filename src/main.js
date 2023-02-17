@@ -4,7 +4,7 @@ import App from "./App.vue"
 import { createWebHistory, createRouter } from "vue-router"
 import Inspections from "@/pages/Inspections.vue"
 import Users from "@/pages/Users.vue"
-import List from "@/pages/List.vue"
+import Sectors from "@/pages/Sectors.vue"
 import components from "@/components/UI"
 
 const router = createRouter({
@@ -21,9 +21,9 @@ const router = createRouter({
       component: Users
     },
     {
-      name: "list",
-      path: "/list",
-      component: List
+      name: "sectors",
+      path: "/sectors",
+      component: Sectors
     }
   ]
 })

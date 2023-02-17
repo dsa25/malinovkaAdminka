@@ -8,14 +8,22 @@ const PORT = process.env.PORT || 5000
 const IP = process.env.IP || "0.0.0.0"
 // const IP = process.env.IP || "localhost"
 const userController = require("./controllers/userController")
+const sectorController = require("./controllers/sectorController")
 const inspectionsController = require("./controllers/inspectionsController")
+
+const fastifyStatic = require("@fastify/static")
+const path = require("path")
 
 app.register(require("@fastify/cors"))
 
-const path = require("path")
-app.register(require("@fastify/static"), {
+app.register(fastifyStatic, {
   root: path.join(__dirname, "/dist"),
   prefix: "/"
+})
+app.register(fastifyStatic, {
+  root: path.join(__dirname, "/imgs"),
+  prefix: "/img",
+  decorateReply: false
 })
 
 // bodyLimit  8048576  8мб для картинок в base64
@@ -27,6 +35,11 @@ app.register((app, opts, done) => {
   app.post("/updateUser", userController.updateUser)
   app.post("/addAllUser", userController.addAllUser)
 
+  app.post("/updateSector", sectorController.updateSector)
+  app.post("/deleteSector", sectorController.removeSector)
+  app.post("/addSector", sectorController.addSector)
+  app.post("/sectors", sectorController.getSectors)
+
   app.post("/addInspect", bLimit, inspectionsController.addInspect)
   app.post("/getInspects", bLimit, inspectionsController.getInspections)
 
@@ -35,7 +48,7 @@ app.register((app, opts, done) => {
   app.get("/users", async (req, reply) => {
     return reply.sendFile("index.html")
   })
-  app.get("/list", async (req, reply) => {
+  app.get("/sectors", async (req, reply) => {
     return reply.sendFile("index.html")
   })
 

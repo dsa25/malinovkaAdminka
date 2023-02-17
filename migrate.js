@@ -4,6 +4,7 @@ const { sequelize } = require("./database/connect")
 
 // const Users = require("./database/users")
 // const Inspections = require("./database/inspections")
+// const Sectors = require("./database/sectors")
 
 // синхронизация  бд c моделями
 sequelize

@@ -37,11 +37,11 @@ class inspectionsController {
           })
         )
       }
+
+      let pathImg = ""
       if (req.body.srcPhoto) {
         let base64Image = req.body.srcPhoto.split(";base64,").pop()
-        var pathImg = `./dist/img/${
-          req.body.idList
-        }_${getTime()}_${Date.now()}.jpg`
+        pathImg = `./img/${req.body.idList}_${getTime()}_${Date.now()}.jpg`
         await fs.writeFile(pathImg, base64Image, {
           encoding: "base64"
         })

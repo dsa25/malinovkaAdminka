@@ -93,7 +93,8 @@ export default {
   methods: {
     async addUser() {
       try {
-        console.log(this.newUser)
+        // console.log(this.newUser)
+        // console.log(JSON.parse(JSON.stringify(this)))
         await this.addUser(this.newUser)
         this.newUser = { id: 0, fio: "", status: -1 }
       } catch (e) {

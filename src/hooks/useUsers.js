@@ -1,5 +1,5 @@
 import { ref, onMounted } from "vue"
-import { myFetch, deepClone } from "../../func"
+import { myFetch, deepClone } from "@/func"
 
 const users = ref([])
 

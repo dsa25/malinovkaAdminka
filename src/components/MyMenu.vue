@@ -1,13 +1,13 @@
 <template>
   <div class="menu">
     <router-link to="/" :class="{ active: $route.path === '/' }"
-      >Inspects</router-link
+      >Осмотры</router-link
+    >
+    <router-link to="/sectors" :class="{ active: $route.path === '/sectors' }"
+      >Участки</router-link
     >
     <router-link to="/users" :class="{ active: $route.path === '/users' }"
       >Users</router-link
-    >
-    <router-link to="/list" :class="{ active: $route.path === '/list' }"
-      >List</router-link
     >
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
   display: flex;
 }
 .menu a {
-  margin-left: 12px;
+  margin-left: 20px;
   color: #6a6e74c7;
   text-transform: uppercase;
   font-size: 14px;
