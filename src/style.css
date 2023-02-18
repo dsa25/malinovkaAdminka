@@ -76,3 +76,11 @@ header {
   white-space: nowrap;
   font-size: 13px;
 }
+.tableHead {
+  width: auto;
+  font-size: 12px;
+}
+.tableHead td,
+.tableHead th {
+  padding: 0 10px;
+}

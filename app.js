@@ -31,9 +31,16 @@ const bLimit = { bodyLimit: 8048576 }
 
 app.register((app, opts, done) => {
   app.post("/users", userController.getUsers)
-  app.post("/addUser", userController.addUser)
-  app.post("/updateUser", userController.updateUser)
+  app.post(
+    "/addUser",
+    async (req, reply) => await userController.addUser(req, reply)
+  )
+  app.post(
+    "/updateUser",
+    async (req, reply) => await userController.updateUser(req, reply)
+  )
   app.post("/addAllUser", userController.addAllUser)
+  app.post("/createVersions", userController.creteRowVer)
 
   app.post("/updateSector", sectorController.updateSector)
   app.post("/deleteSector", sectorController.removeSector)

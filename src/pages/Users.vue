@@ -1,7 +1,6 @@
 <template>
   <section>
     <div class="row">
-      <h1 class="h01">Users ...{{ base_url }}</h1>
       <div class="text-[12px] text-red-600">
         <p>
           * Нельзя менять ФИО одного пользователя на другого! Иначе будет
@@ -13,6 +12,23 @@
           0
         </p>
       </div>
+      <h1 class="h01">Users ...{{ base_url }}</h1>
+      <table class="table tableHead my-3">
+        <tr>
+          <td>page</td>
+          <td>count</td>
+          <td>version</td>
+          <td>create</td>
+          <td>update</td>
+        </tr>
+        <tr>
+          <th>{{ versionUs.name }}</th>
+          <td>{{ users.length }}</td>
+          <td>{{ versionUs.version }}</td>
+          <td>{{ versionUs.createdAt }}</td>
+          <td>{{ versionUs.updatedAt }}</td>
+        </tr>
+      </table>
       <div class="flex justify-between items-center text-center py-1">
         <div class="w-1/12">id</div>
         <div class="w-1/3">ФИО</div>
@@ -54,6 +70,7 @@
           <MySelect
             id="mySelect1"
             v-model="newUser.status"
+            :value="newUser.status"
             :options="listStatus"
           />
         </div>
@@ -76,27 +93,29 @@ export default {
       listStatus: [
         { value: 0, name: 0 },
         { value: 1, name: 1 }
-      ]
+      ],
+      newUser: {
+        id: 0,
+        fio: "",
+        status: -1
+      }
     }
   },
   setup(props) {
-    let newUser = ref({
-      id: 0,
-      fio: "",
-      status: -1
-    })
+    const { users, versionUs, addUser, updateUser } = useUsers()
 
-    const { users, addUser, updateUser } = useUsers()
-
-    return { users, newUser, addUser, updateUser }
+    return { users, versionUs, addUser, updateUser }
   },
   methods: {
     async addUser() {
       try {
-        // console.log(this.newUser)
-        // console.log(JSON.parse(JSON.stringify(this)))
         await this.addUser(this.newUser)
-        this.newUser = { id: 0, fio: "", status: -1 }
+        this.newUser = {
+          id: 0,
+          fio: "",
+          status: -1
+        }
+        return
       } catch (e) {
         console.log(e)
       }
