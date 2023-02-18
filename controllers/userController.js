@@ -8,10 +8,7 @@ class userController {
       let users = await db.all(sql)
       let sql2 = "SELECT * FROM `versions` WHERE `name`='users'"
       let vers = await db.all(sql2)
-      console.log("users", users)
-      // let users = await db.query(sql)
-      console.log("vers", vers)
-      reply.send(
+      return reply.send(
         JSON.stringify({
           status: 1,
           body: { users: users, version: vers },
@@ -143,56 +140,6 @@ class userController {
     }
   }
 
-  async addAllUser(req, reply) {
-    try {
-      if (req.body == undefined) {
-        reply.send(
-          JSON.stringify({
-            status: 0,
-            body: {},
-            msg: "не передан параметр!"
-          })
-        )
-      }
-      console.log("req.body", req.body)
-      let db = await opn()
-      let truncate = await db.run("DELETE FROM  users")
-      // resq { stmt: Statement { stmt: undefined }, lastID: 0, changes: 23 }
-      if (truncate != undefined) {
-        console.log("truncate", truncate)
-        let values = req.body
-          .map(
-            (item) => `(${item.id}, 
-        '${item.fio}', 
-        ${item.post}, 
-        '${item.groupDop}', 
-        ${item.status})`
-          )
-          .join(", ")
-        let sql = `INSERT INTO users (id, fio, post, groupDop, status) VALUES ${values}`
-        let res = await db.run(sql)
-        // { stmt: Statement { stmt: undefined }, lastID: 6, changes: 3 }
-        if (res && res?.lastID > 0 && res?.changes > 0) {
-          reply.send(
-            JSON.stringify({
-              status: 1,
-              body: { lastID: res.lastID, changes: res.changes },
-              msg: "Успех!"
-            })
-          )
-        }
-      }
-
-      JSON.stringify({
-        status: 0,
-        body: {},
-        msg: "что то пошло не так!"
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   async creteRowVer(req, reply) {
     try {
       let db = await opn()
@@ -204,7 +151,7 @@ class userController {
       let res = await db.run(sql)
       // { stmt: Statement { stmt: undefined }, lastID: 6, changes: 3 }
       if (res && res?.lastID > 0 && res?.changes > 0) {
-        reply.send(
+        return reply.send(
           JSON.stringify({
             status: 1,
             body: { lastID: res.lastID, changes: res.changes },
@@ -212,7 +159,7 @@ class userController {
           })
         )
       }
-      reply.send(
+      return reply.send(
         JSON.stringify({
           status: 0,
           body: {},

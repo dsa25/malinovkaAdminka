@@ -30,28 +30,6 @@ app.register(fastifyStatic, {
 const bLimit = { bodyLimit: 8048576 }
 
 app.register((app, opts, done) => {
-  app.post("/users", userController.getUsers)
-  app.post(
-    "/addUser",
-    async (req, reply) => await userController.addUser(req, reply)
-  )
-  app.post(
-    "/updateUser",
-    async (req, reply) => await userController.updateUser(req, reply)
-  )
-  app.post("/addAllUser", userController.addAllUser)
-  app.post("/createVersions", userController.creteRowVer)
-
-  app.post("/updateSector", sectorController.updateSector)
-  app.post("/deleteSector", sectorController.removeSector)
-  app.post("/addSector", sectorController.addSector)
-  app.post("/sectors", sectorController.getSectors)
-
-  app.post("/addInspect", bLimit, inspectionsController.addInspect)
-  app.post("/getInspects", bLimit, inspectionsController.getInspections)
-
-  // app.get("/list/:id", mainController.getInspect)
-
   app.get("/users", async (req, reply) => {
     return reply.sendFile("index.html")
   })
@@ -70,6 +48,40 @@ app.register((app, opts, done) => {
       console.log("error", error)
     }
   })
+
+  // -------------------------------------------------------------
+
+  app.post("/users", userController.getUsers)
+  app.post(
+    "/addUser",
+    async (req, reply) => await userController.addUser(req, reply)
+  )
+  app.post(
+    "/updateUser",
+    async (req, reply) => await userController.updateUser(req, reply)
+  )
+  app.post("/createVersions", userController.creteRowVer)
+
+  // -------------------------------------------------------------
+
+  app.post(
+    "/updateSector",
+    async (req, reply) => await sectorController.updateSector(req, reply)
+  )
+  app.post(
+    "/deleteSector",
+    async (req, reply) => await sectorController.removeSector(req, reply)
+  )
+  app.post(
+    "/addSector",
+    async (req, reply) => await sectorController.addSector(req, reply)
+  )
+  app.post("/sectors", sectorController.getSectors)
+
+  // -------------------------------------------------------------
+
+  app.post("/addInspect", bLimit, inspectionsController.addInspect)
+  app.post("/getInspects", bLimit, inspectionsController.getInspections)
 
   done()
 })

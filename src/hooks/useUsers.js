@@ -1,26 +1,26 @@
 import { ref, onMounted, computed } from "vue"
-import { myFetch, deepClone, getTime } from "@/func"
+import { myFetch, deepClone, formatTimeVers } from "@/func"
 
 const users = ref([])
-const versionUs = ref([])
+const versionUs = ref({
+  name: "users",
+  version: "NaN",
+  updatedAt: "NaN",
+  createdAt: "NaN"
+})
 
 export default function useUsers(props) {
   const BASE_URL = ref(import.meta.env.VITE_BASE_URL)
 
-  function formatTimeVers(version) {
-    version.createdAt = getTime(version.createdAt, "h:m d.m.y")
-    version.updatedAt = getTime(version.updatedAt, "h:m d.m.y")
-    return version
-  }
-
   const addUser = async (data) => {
     try {
-      console.log("newUserData", deepClone(data))
-      const res = await myFetch(`${BASE_URL.value}/addUser`, deepClone(data))
+      let dataDC = deepClone(data)
+      console.log("newUserData", dataDC)
+      const res = await myFetch(`${BASE_URL.value}/addUser`, dataDC)
       console.log("res", res)
       if (res?.status == 1 && res?.body != undefined) {
-        let newUser = { id: res.body.id, fio: data.fio, status: data.status }
-        users.value.push(newUser)
+        dataDC.id = res.body.id
+        users.value.push(dataDC)
         versionUs.value = formatTimeVers(res.body.version[0])
         return
       } else return alert(res.msg)

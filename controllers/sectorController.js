@@ -6,10 +6,12 @@ class sectorController {
       let sql = "SELECT * FROM `sectors` WHERE `active`=1"
       let db = await opn()
       let sectors = await db.all(sql)
-      reply.send(
+      let sql2 = "SELECT * FROM `versions` WHERE `name`='sectors'"
+      let vers = await db.all(sql2)
+      return reply.send(
         JSON.stringify({
           status: 1,
-          body: sectors,
+          body: { sectors, version: vers },
           msg: "Участки!"
         })
       )
@@ -22,7 +24,7 @@ class sectorController {
     try {
       console.log("req.body", req.body)
       if (req.body == undefined) {
-        reply.send(
+        return reply.send(
           JSON.stringify({
             status: 0,
             body: {},
@@ -36,14 +38,13 @@ class sectorController {
         req.body.street.trim().length == 0 ||
         req.body.houseNum.trim().length == 0
       ) {
-        reply.send(
+        return reply.send(
           JSON.stringify({
             status: 0,
             body: {},
             msg: "не все поля заполнены!"
           })
         )
-        return
       }
       let args = [
         req.body.persNum.trim(),
@@ -58,23 +59,26 @@ class sectorController {
       let sql =
         "INSERT INTO `sectors`(`persNum`, `nameVillage`, `street`, `houseNum`, `litera`, `numberPU`, `typePU`,  `datePU`) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)"
       let db = await opn()
-      let res = await db.run(sql, args)
-      console.log("res", res)
-      // res { stmt: Statement { stmt: undefined }, lastID: 3, changes: 1 }
-      if (res && res?.lastID > 0) {
-        reply.send(
+      let sector = await db.run(sql, args)
+      console.log("sector", sector)
+      // sector { stmt: Statement { stmt: undefined }, lastID: 3, changes: 1 }
+      const { vers, version } = await this.updateVersSectors(db)
+      if (sector && sector?.lastID > 0 && vers && vers?.changes == 1) {
+        return reply.send(
           JSON.stringify({
             status: 1,
-            body: { id: res.lastID },
+            body: { id: sector.lastID, version: version },
             msg: "Успех!"
           })
         )
       }
-      JSON.stringify({
-        status: 0,
-        body: {},
-        msg: "что то пошло не так!"
-      })
+      return reply.send(
+        JSON.stringify({
+          status: 0,
+          body: {},
+          msg: "что то пошло не так!"
+        })
+      )
     } catch (error) {
       console.log(error)
     }
@@ -83,7 +87,7 @@ class sectorController {
   async updateSector(req, reply) {
     try {
       if (req.body == undefined) {
-        reply.send(
+        return reply.send(
           JSON.stringify({
             status: 0,
             body: {},
@@ -98,7 +102,7 @@ class sectorController {
         req.body.houseNum.trim().length == 0 ||
         req.body.id < 1
       ) {
-        reply.send(
+        return reply.send(
           JSON.stringify({
             status: 0,
             body: {},
@@ -123,16 +127,17 @@ class sectorController {
       let res = await db.run(sql, args)
       // res { stmt: Statement { stmt: undefined }, lastID: 0, changes: 1 }
       console.log("res", res)
-      if (res && res?.changes == 1) {
-        reply.send(
+      const { vers, version } = await this.updateVersSectors(db)
+      if (res && res?.changes == 1 && vers && vers?.changes == 1) {
+        return reply.send(
           JSON.stringify({
             status: 1,
-            body: {},
+            body: { version },
             msg: "Успешно!"
           })
         )
       }
-      reply.send(
+      return reply.send(
         JSON.stringify({
           status: 0,
           body: {},
@@ -151,7 +156,7 @@ class sectorController {
         req.body?.id < 1 ||
         req.body.id == undefined
       ) {
-        reply.send(
+        return reply.send(
           JSON.stringify({
             status: 0,
             body: {},
@@ -165,22 +170,37 @@ class sectorController {
       let res = await db.run(sql, args)
       // res { stmt: Statement { stmt: undefined }, lastID: 0, changes: 1 }
       console.log("res", res)
-      if (res && res?.changes == 1) {
-        reply.send(
+      const { vers, version } = await this.updateVersSectors(db)
+      if (res && res?.changes == 1 && vers && vers?.changes == 1) {
+        return reply.send(
           JSON.stringify({
             status: 1,
-            body: {},
+            body: { version },
             msg: "Успешно!"
           })
         )
       }
-      reply.send(
+      return reply.send(
         JSON.stringify({
           status: 0,
           body: {},
           msg: "что то пошло не так!"
         })
       )
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async updateVersSectors(db) {
+    try {
+      let sql2 =
+        "UPDATE `versions` SET version= version+1, updatedAt = datetime()  WHERE name='sectors'"
+      let vers = await db.run(sql2)
+      let sql3 = "SELECT * FROM `versions` WHERE `name`='sectors'"
+      let version = await db.all(sql3)
+      console.log({ vers, version })
+      return { vers, version }
     } catch (error) {
       console.log(error)
     }

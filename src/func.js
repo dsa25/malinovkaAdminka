@@ -1,4 +1,4 @@
-export { myFetch, getTime, deepClone }
+export { myFetch, getTime, deepClone, formatTimeVers }
 
 function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj))
@@ -21,6 +21,12 @@ function getTime(date = "now", format = "d.m.y") {
   if (format == "h:m:s d.m.y") return `${hh}:${mm}:${ss} ${dd}.${mo}.${yy}`
   if (format === "y-m-d") return `${yy}-${mo}-${dd}`
   else return `${dd}.${mo}.${yy}`
+}
+
+function formatTimeVers(version) {
+  version.createdAt = getTime(version.createdAt, "h:m d.m.y")
+  version.updatedAt = getTime(version.updatedAt, "h:m d.m.y")
+  return version
 }
 
 const myFetch = async (url, data = [], method = "POST") => {

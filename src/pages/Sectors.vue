@@ -1,8 +1,22 @@
 <template>
   <section>
     <div class="row">
-      <!-- <img src="@/assets/vue-5532db34.svg" alt="" /> -->
-      <h1>Список участков ({{ sectors.length }})</h1>
+      <table class="table tableHead mb-7">
+        <tr>
+          <td>page</td>
+          <td>count</td>
+          <td>version</td>
+          <td>update</td>
+          <td>create</td>
+        </tr>
+        <tr>
+          <th>{{ versionSec.name }}</th>
+          <td>{{ sectors.length }}</td>
+          <td>{{ versionSec.version }}</td>
+          <td>{{ versionSec.updatedAt }}</td>
+          <td>{{ versionSec.createdAt }}</td>
+        </tr>
+      </table>
       <table class="table">
         <tr>
           <th>id</th>
@@ -100,9 +114,10 @@ import useSectors from "@/hooks/useSectors"
 export default {
   name: "Sectors",
   setup(props) {
-    const { sectors, addSector, updateSector, delSector } = useSectors()
+    const { sectors, versionSec, addSector, updateSector, delSector } =
+      useSectors()
 
-    return { sectors, addSector, updateSector, delSector }
+    return { sectors, versionSec, addSector, updateSector, delSector }
   },
   data() {
     return {
@@ -149,7 +164,7 @@ export default {
     async deleteSector(item) {
       try {
         let modal = confirm(
-          `Вы точно хотите удалить ${item.id}) ${item.street} ${item.houseNum} ${item.litera} ?`
+          `Вы точно хотите удалить № ${item.id}) ${item.street} ${item.houseNum} ${item.litera} ?`
         )
         if (modal) {
           await this.delSector(item.id)

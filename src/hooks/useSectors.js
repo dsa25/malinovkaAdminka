@@ -1,7 +1,13 @@
 import { ref, onMounted } from "vue"
-import { myFetch, deepClone } from "@/func"
+import { myFetch, deepClone, formatTimeVers } from "@/func"
 
 const sectors = ref([])
+const versionSec = ref({
+  name: "sectors",
+  version: "NaN",
+  updatedAt: "NaN",
+  createdAt: "NaN"
+})
 
 export default function useSectors(props) {
   const BASE_URL = ref(import.meta.env.VITE_BASE_URL)
@@ -10,12 +16,12 @@ export default function useSectors(props) {
     try {
       let dataDC = deepClone(data)
       console.log("newSector:", dataDC)
-      console.log("newSector:", dataDC)
       const res = await myFetch(`${BASE_URL.value}/addSector`, dataDC)
       console.log("res", res)
       if (res?.status == 1 && res?.body != undefined) {
         dataDC.id = res.body.id
         sectors.value.push(dataDC)
+        versionSec.value = formatTimeVers(res.body.version[0])
         return true
       } else {
         alert(res.msg)
@@ -33,6 +39,7 @@ export default function useSectors(props) {
       const res = await myFetch(`${BASE_URL.value}/updateSector`, dataDC)
       console.log("res", res)
       if (res?.status == 1) {
+        versionSec.value = formatTimeVers(res.body.version[0])
         for (let i = 0; i < sectors.value.length; i++) {
           if (sectors.value[i].id == dataDC.id) {
             sectors.value[i] = dataDC
@@ -52,6 +59,7 @@ export default function useSectors(props) {
       const res = await myFetch(`${BASE_URL.value}/deleteSector`, { id: id })
       console.log("res", res)
       if (res?.status == 1) {
+        versionSec.value = formatTimeVers(res.body.version[0])
         sectors.value = sectors.value.filter((item) => item.id != id)
         return
       } else alert(res.msg)
@@ -65,7 +73,9 @@ export default function useSectors(props) {
       const res = await myFetch(`${BASE_URL.value}/sectors`)
       console.log("res", res)
       if (res?.status == 1 && res?.body != undefined) {
-        return (sectors.value = res.body)
+        sectors.value = res.body.sectors
+        versionSec.value = formatTimeVers(res.body.version[0])
+        return
       } else console.log("не корректные данные", res)
     } catch (e) {
       console.log(e)
@@ -76,6 +86,7 @@ export default function useSectors(props) {
 
   return {
     sectors,
+    versionSec,
     updateSector,
     delSector,
     addSector

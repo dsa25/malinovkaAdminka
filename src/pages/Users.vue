@@ -1,34 +1,23 @@
 <template>
   <section>
     <div class="row">
-      <div class="text-[12px] text-red-600">
-        <p>
-          * Нельзя менять ФИО одного пользователя на другого! Иначе будет
-          путаница в участниках прошлых осмотров
-        </p>
-        <p>* Если нужен новый - добавляем его</p>
-        <p>
-          * Если нужно убрать(удалить) из списка в приложении - меняем статус на
-          0
-        </p>
-      </div>
-      <h1 class="h01">Users ...{{ base_url }}</h1>
-      <table class="table tableHead my-3">
+      <table class="table tableHead mb-7">
         <tr>
           <td>page</td>
           <td>count</td>
           <td>version</td>
-          <td>create</td>
           <td>update</td>
+          <td>create</td>
         </tr>
         <tr>
           <th>{{ versionUs.name }}</th>
           <td>{{ users.length }}</td>
           <td>{{ versionUs.version }}</td>
-          <td>{{ versionUs.createdAt }}</td>
           <td>{{ versionUs.updatedAt }}</td>
+          <td>{{ versionUs.createdAt }}</td>
         </tr>
       </table>
+
       <div class="flex justify-between items-center text-center py-1">
         <div class="w-1/12">id</div>
         <div class="w-1/3">ФИО</div>
@@ -77,6 +66,18 @@
         <div class="w-1/4 text-right">
           <MyBtn @click="addUser" class="btn btn_success">Добавить</MyBtn>
         </div>
+      </div>
+
+      <div class="text-[12px] text-red-600 mt-5">
+        <p>
+          * Нельзя менять ФИО одного пользователя на другого! Иначе будет
+          путаница в участниках прошлых осмотров
+        </p>
+        <p>* Если нужен новый - добавляем его</p>
+        <p>
+          * Если нужно убрать(удалить) из списка в приложении - меняем статус на
+          0
+        </p>
       </div>
     </div>
   </section>
