@@ -5,8 +5,12 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "nodemon": "nodemon app.js",
+    "migrate": "node migrate.js",
+    "dev": "vite",
     "build": "vite build",
-    "start": "node app.js"
+    "preview": "vite preview"
   },
   "author": "",
   "license": "ISC",
