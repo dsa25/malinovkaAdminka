@@ -21,7 +21,7 @@ app.register(fastifyStatic, {
   prefix: "/"
 })
 app.register(fastifyStatic, {
-  root: path.join(__dirname, "/imgs"),
+  root: path.join(__dirname, "/img"),
   prefix: "/img",
   decorateReply: false
 })
