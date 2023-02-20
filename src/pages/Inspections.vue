@@ -50,11 +50,15 @@
           <td class="w-[60px]">{{ item.kpNight }}</td>
           <td class="w-[60px]">{{ item.kpTotal }}</td>
           <td>
-            <img
-              style="width: 80px; height: auto"
-              :src="item.srcPhoto"
-              alt=""
-            />
+            <a
+              v-for="src in item.srcPhoto"
+              :key="src"
+              :href="src"
+              class="m-1 inline-block"
+              target="_blank"
+            >
+              <img style="width: 20px; height: auto" :src="src" alt="img" />
+            </a>
           </td>
           <td>{{ item.user }}</td>
           <td>{{ item.notation }}</td>

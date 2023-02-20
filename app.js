@@ -61,6 +61,7 @@ app.register((app, opts, done) => {
     async (req, reply) => await userController.updateUser(req, reply)
   )
   app.post("/createVersions", userController.creteRowVer)
+  app.post("/checkVersions", userController.checkVers)
 
   // -------------------------------------------------------------
 

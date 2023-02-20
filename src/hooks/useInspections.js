@@ -11,6 +11,12 @@ export default function useInspections(props) {
       const res = await myFetch(`${BASE_URL.value}/getInspects`)
       console.log("insp", res)
       if (res?.status == 1 && res?.body != undefined) {
+        console.log("body", res.body)
+        // let result = []
+        res.body.forEach((item) => {
+          item.srcPhoto = JSON.parse(item.srcPhoto)
+        })
+        // console.log("photos", result)
         return (inspections.value = res.body)
       } else console.log("некорректные данные", res)
     } catch (e) {

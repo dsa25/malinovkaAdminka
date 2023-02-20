@@ -7,7 +7,7 @@ class inspectionsController {
       let sql = "SELECT * FROM `inspections`"
       let db = await opn()
       let res = await db.all(sql)
-      reply.send(
+      return reply.send(
         JSON.stringify({
           status: 1,
           body: res,
@@ -29,7 +29,7 @@ class inspectionsController {
   async addInspect(req, reply) {
     try {
       if (req.body == undefined) {
-        reply.send(
+        return reply.send(
           JSON.stringify({
             status: 0,
             body: {},
@@ -38,24 +38,33 @@ class inspectionsController {
         )
       }
 
-      let pathImg = ""
-      if (req.body.srcPhoto) {
-        let base64Image = req.body.srcPhoto.split(";base64,").pop()
-        pathImg = `./img/${req.body.idList}_${getTime()}_${Date.now()}.jpg`
-        await fs.writeFile(pathImg, base64Image, {
-          encoding: "base64"
-        })
+      console.log("req.body: " + req.body.srcPhoto.length)
 
-        // reply.send(
-        //   JSON.stringify({
-        //     status: 0,
-        //     body: {},
-        //     msg: "job photo.."
-        //   })
-        // )
+      let listImg = []
+      if (req.body.srcPhoto.length) {
+        req.body.srcPhoto.forEach(async (item) => {
+          let base64Image = item.split(";base64,").pop()
+          let pathImg = `./img/${
+            req.body.idSector
+          }_${getTime()}_${Date.now()}.jpg`
+          listImg.push(pathImg)
+          await fs.writeFile(pathImg, base64Image, {
+            encoding: "base64"
+          })
+        })
+        console.log({ listImg })
+      } else {
+        return reply.send(
+          JSON.stringify({
+            status: 0,
+            body: {},
+            msg: "not photos!"
+          })
+        )
       }
 
-      //   let srcPhoto = JSON.stringify(req.body.srcPhoto)
+      let srcPhoto = JSON.stringify(listImg)
+      console.log({ srcPhoto })
       let args = [
         req.body.user,
         req.body.address,
@@ -66,7 +75,7 @@ class inspectionsController {
         req.body.kpDay,
         req.body.kpNight,
         req.body.kpTotal,
-        pathImg,
+        srcPhoto,
         req.body.notation
       ]
       let sql =
@@ -81,7 +90,7 @@ class inspectionsController {
         //   let inspect = await db.get(
         //     `SELECT * FROM inspections WHERE id =${res.lastID}`
         //   )
-        reply.send(
+        return reply.send(
           JSON.stringify({
             status: 1,
             body: {},
@@ -89,9 +98,8 @@ class inspectionsController {
             msg: "Осмотр сохранен в бд!"
           })
         )
-        // }
       }
-      reply.send(
+      return reply.send(
         JSON.stringify({ status: 0, body: {}, msg: "Что то пошло не так!" })
       )
     } catch (error) {

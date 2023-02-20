@@ -170,6 +170,57 @@ class userController {
       console.log(error)
     }
   }
+
+  async checkVers(req, reply) {
+    try {
+      if (
+        req.body == undefined &&
+        req.body.versions == undefined &&
+        req.body.versions.users == undefined &&
+        req.body.versions.sectors == undefined
+      ) {
+        return reply.send(
+          JSON.stringify({
+            status: 0,
+            body: {},
+            msg: "не передан параметр!"
+          })
+        )
+      }
+      console.log("req.body" + req.body.versions)
+      let result = {}
+      let db = await opn()
+      let sql = "SELECT version, name, updatedAt FROM `versions`"
+      let list = await db.all(sql)
+      if (list.length) {
+        let usersV = list[0].version >= 0 ? list[0].version : -1
+        let sectorsV = list[1].version >= 0 ? list[1].version : -1
+        console.log({ usersV, sectorsV })
+        if (usersV > -1 && usersV != req.body.users) {
+          let sql1 = "SELECT * FROM `users` WHERE `status` = 1"
+          let users = await db.all(sql1)
+          result.users = users
+          result.usersV = { v: usersV, date: list[0].updatedAt }
+        }
+        if (sectorsV > -1 && sectorsV != req.body.sectors) {
+          let sql2 = "SELECT * FROM `sectors` WHERE `active`=1"
+          let sectors = await db.all(sql2)
+          result.sectors = sectors
+          result.sectorsV = { v: sectorsV, date: list[1].updatedAt }
+        }
+      }
+      console.log({ result })
+      return reply.send(
+        JSON.stringify({
+          status: 1,
+          body: result,
+          msg: "check!"
+        })
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
 
 module.exports = new userController()
