@@ -84,3 +84,26 @@ header {
 .tableHead th {
   padding: 0 10px;
 }
+
+tr.head_tbl {
+  background-color: #f7f7f7;
+  position: sticky;
+  z-index: 2;
+}
+.head_tbl td,
+.head_tbl th {
+  padding: 2px;
+  background-color: #f7f7f7;
+}
+.head_th {
+  top: -1px;
+  height: 25px;
+  white-space: nowrap;
+  /* border-top: 1px solid green; */
+}
+.head_tr {
+  top: 27px;
+}
+.head_tbl input {
+  background-color: #f7f7f7;
+}

@@ -205,6 +205,60 @@ class sectorController {
       console.log(error)
     }
   }
+
+  async addAllSectors(req, reply) {
+    try {
+      if (req.body == undefined) {
+        return reply.send(
+          JSON.stringify({
+            status: 0,
+            body: {},
+            msg: " body = undefined!"
+          })
+        )
+      }
+      console.log("req.body", req.body)
+      let values = req.body
+        .map(
+          (item) =>
+            `(
+        '${item.persNum}', 
+        '${item.nameVillage}', 
+        '${item.street}', 
+        '${item.houseNum}', 
+        '${item.litera}', 
+        '${item.numberPU}', 
+        '${item.typePU}', 
+        '${item.datePU}' 
+        )`
+        )
+        .join(", ")
+      console.log("values", values)
+      // return reply.send(
+      //   JSON.stringify({
+      //     status: 0,
+      //     body: {},
+      //     msg: "stop!"
+      //   })
+      // )
+      let db = await opn()
+      let sql = `INSERT INTO sectors (persNum, nameVillage, street, houseNum, litera, numberPU, typePU, datePU) VALUES ${values}`
+      let res = await db.run(sql)
+      // { stmt: Statement { stmt: undefined }, lastID: 6, changes: 3 }
+      console.log({ res })
+      if (res && res?.lastID > 0 && res?.changes > 0) {
+        reply.send(
+          JSON.stringify({
+            status: 1,
+            body: { lastID: res.lastID, changes: res.changes },
+            msg: "All sectors add: Успех!"
+          })
+        )
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }
 
 module.exports = new sectorController()

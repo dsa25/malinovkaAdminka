@@ -17,8 +17,9 @@
           <td>{{ versionSec.createdAt }}</td>
         </tr>
       </table>
-      <table class="table">
-        <tr>
+      <!-- <MyBtn @click="setAS()" class="btn btn_danger">set all Sectors</MyBtn> -->
+      <table class="table tbl_sectors">
+        <tr class="head_tbl head_th">
           <th>id</th>
           <th>Лиц.счет <span class="text-red-500">*</span></th>
           <th>Нас.пункт <span class="text-red-500">*</span></th>
@@ -30,7 +31,7 @@
           <th>Дата выпуска ПУ</th>
           <th>actions</th>
         </tr>
-        <tr>
+        <tr class="head_tbl head_tr">
           <th></th>
           <th>
             <MyInput v-model="itemSector.persNum" />
@@ -111,13 +112,27 @@
 
 <script>
 import useSectors from "@/hooks/useSectors"
+
 export default {
   name: "Sectors",
   setup(props) {
-    const { sectors, versionSec, addSector, updateSector, delSector } =
-      useSectors()
+    const {
+      sectors,
+      versionSec,
+      addSector,
+      updateSector,
+      delSector,
+      setAllSectors
+    } = useSectors()
 
-    return { sectors, versionSec, addSector, updateSector, delSector }
+    return {
+      sectors,
+      versionSec,
+      addSector,
+      updateSector,
+      delSector,
+      setAllSectors
+    }
   },
   data() {
     return {
@@ -137,6 +152,14 @@ export default {
     }
   },
   methods: {
+    async setAS() {
+      try {
+        console.log("setAS...")
+        this.setAllSectors()
+      } catch (e) {
+        console.log(e)
+      }
+    },
     async addNewSector() {
       try {
         console.log(this.itemSector)

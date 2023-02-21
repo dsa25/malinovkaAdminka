@@ -2,11 +2,10 @@ require("dotenv").config()
 const app = require("fastify")({ trustProxy: true, logger: false })
 // const { pool } = require("./database/connect")
 const { opn } = require("./database/connect")
-const PORT = process.env.PORT || 5000
-// const PORT = process.env.PORT || 80
-// const IP = process.env.IP || "192.168.0.105"
-const IP = process.env.IP || "0.0.0.0"
-// const IP = process.env.IP || "localhost"
+
+const PORT = 5000
+const IP = "0.0.0.0"
+
 const userController = require("./controllers/userController")
 const sectorController = require("./controllers/sectorController")
 const inspectionsController = require("./controllers/inspectionsController")
@@ -78,6 +77,7 @@ app.register((app, opts, done) => {
     async (req, reply) => await sectorController.addSector(req, reply)
   )
   app.post("/sectors", sectorController.getSectors)
+  app.post("/setAS", sectorController.addAllSectors)
 
   // -------------------------------------------------------------
 
@@ -100,7 +100,7 @@ const start = async () => {
         `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()} server: ${address}`
       )
       if (err) {
-        fastify.log.error(err)
+        app.log.error(err)
         process.exit(1)
       }
     })

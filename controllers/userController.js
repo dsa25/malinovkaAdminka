@@ -143,9 +143,9 @@ class userController {
   async creteRowVer(req, reply) {
     try {
       let db = await opn()
-      let truncate = await db.run("DELETE FROM  `versions`")
+      // let truncate = await db.run("DELETE FROM  `versions`")
       // resq { stmt: Statement { stmt: undefined }, lastID: 0, changes: 23 }
-      console.log("truncate", truncate)
+      // console.log("truncate", truncate)
       let sql =
         "INSERT INTO versions (`name`, `version`) VALUES ('users', 0), ('sectors', 0)"
       let res = await db.run(sql)

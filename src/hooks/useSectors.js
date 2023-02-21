@@ -1,5 +1,6 @@
 import { ref, onMounted } from "vue"
 import { myFetch, deepClone, formatTimeVers } from "@/func"
+import { setAllSectorsFunc } from "@/list"
 
 const sectors = ref([])
 const versionSec = ref({
@@ -68,6 +69,25 @@ export default function useSectors(props) {
     }
   }
 
+  const setAllSectors = async (data) => {
+    try {
+      console.log(setAllSectorsFunc())
+      let data = setAllSectorsFunc()
+      // return
+      // let dataDC = deepClone(data)
+      const res = await myFetch(`${BASE_URL.value}/setAS`, data)
+      console.log("resAs", res)
+      if (res?.status == 1 && res?.body != undefined) {
+        return
+      } else {
+        console.log(res.msg)
+        return
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   const getSectors = async () => {
     try {
       const res = await myFetch(`${BASE_URL.value}/sectors`)
@@ -89,6 +109,7 @@ export default function useSectors(props) {
     versionSec,
     updateSector,
     delSector,
+    setAllSectors,
     addSector
   }
 }
