@@ -25,6 +25,11 @@ app.register(fastifyStatic, {
   prefix: "/img",
   decorateReply: false
 })
+app.register(fastifyStatic, {
+  root: path.join(__dirname, "/pwa/"),
+  prefix: "/malinovka",
+  decorateReply: false
+})
 
 // bodyLimit  8048576  8мб для картинок в base64
 const bLimit = { bodyLimit: 8048576 }
