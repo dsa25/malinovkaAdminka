@@ -42,11 +42,11 @@ class inspectionsController {
 
       let listImg = []
       if (req.body.srcPhoto.length) {
-        req.body.srcPhoto.forEach(async (item) => {
+        req.body.srcPhoto.forEach(async (item, index) => {
           let base64Image = item.split(";base64,").pop()
           let pathImg = `./img/${
             req.body.idSector
-          }_${getTime()}_${Date.now()}.jpg`
+          }_${index}_${getTime()}_${Date.now()}.jpg`
           listImg.push(pathImg)
           await fs.writeFile(pathImg, base64Image, {
             encoding: "base64"
