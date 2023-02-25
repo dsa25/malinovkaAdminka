@@ -1,14 +1,15 @@
 import { ref, onMounted } from "vue"
-import { myFetch, deepClone } from "@/func"
+import { myFetch, deepClone, getTime } from "@/func"
 
 const inspections = ref([])
 
 export default function useInspections(props) {
   const BASE_URL = ref(import.meta.env.VITE_BASE_URL)
 
-  const getInspections = async () => {
+  const getInspections = async (data = {}) => {
     try {
-      const res = await myFetch(`${BASE_URL.value}/getInspects`)
+      let dataDC = deepClone(data)
+      const res = await myFetch(`${BASE_URL.value}/getInspects`, dataDC)
       console.log("insp", res)
       if (res?.status == 1 && res?.body != undefined) {
         console.log("body", res.body)
@@ -27,6 +28,7 @@ export default function useInspections(props) {
   onMounted(getInspections)
 
   return {
-    inspections
+    inspections,
+    getInspections
   }
 }

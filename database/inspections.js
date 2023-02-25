@@ -10,6 +10,10 @@ const Inspections = sequelize.define(
       primaryKey: true,
       allowNull: false
     },
+    idSector: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     user: {
       type: DataTypes.STRING,
       allowNull: false
@@ -53,13 +57,20 @@ const Inspections = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false
     },
+    createdAt: {
+      type: "TIMESTAMP",
+      defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+      allowNull: false
+    },
     active: {
       type: DataTypes.STRING,
       allowNull: false,
       defaultValue: 1
     }
   },
-  { timestamps: false }
+  {
+    timestamps: false
+  }
 )
 
 module.exports = { Inspections }

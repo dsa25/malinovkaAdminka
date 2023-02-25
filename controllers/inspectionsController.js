@@ -4,7 +4,16 @@ const fs = require("fs").promises
 class inspectionsController {
   async getInspections(req, reply) {
     try {
-      let sql = "SELECT * FROM `inspections`"
+      console.log("body", req.body.from)
+      let where = ""
+      if (req.body?.from && req.body?.before) {
+        where = `WHERE date(createdAt) BETWEEN date('${req.body.from.trim()}') AND  date('${req.body.before.trim()}')`
+      } else {
+        where =
+          "WHERE date(createdAt) BETWEEN date('now', 'start of month') AND date('now')"
+      }
+      let sql = "SELECT * FROM `inspections`" + " " + where
+      console.log({ sql })
       let db = await opn()
       let res = await db.all(sql)
       return reply.send(
@@ -38,8 +47,6 @@ class inspectionsController {
         )
       }
 
-      console.log("req.body: " + req.body.srcPhoto.length)
-
       let listImg = []
       if (req.body.srcPhoto.length) {
         req.body.srcPhoto.forEach(async (item, index) => {
@@ -66,6 +73,7 @@ class inspectionsController {
       let srcPhoto = JSON.stringify(listImg)
       console.log({ srcPhoto })
       let args = [
+        req.body.idSector,
         req.body.user,
         req.body.address,
         req.body.dateInspection,
@@ -79,7 +87,7 @@ class inspectionsController {
         req.body.notation
       ]
       let sql =
-        "INSERT INTO inspections (user, address, dateInspection, numberPU, typePU, datePU, kpDay, kpNight, kpTotal, srcPhoto, notation) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        "INSERT INTO inspections (idSector, user, address, dateInspection, numberPU, typePU, datePU, kpDay, kpNight, kpTotal, srcPhoto, notation) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
       let db = await opn()
       let res = await db.run(sql, args)
       if (res != undefined && res.lastID > 0) {

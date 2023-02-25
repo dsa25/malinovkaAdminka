@@ -4,8 +4,14 @@ function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj))
 }
 
-function getTime(date = "now", format = "d.m.y") {
+function getTime(date = "now", format = "d.m.y", day = undefined) {
   let time = date == "now" ? new Date() : new Date(date)
+
+  if (day == "lastDayMonth")
+    time = new Date(time.getFullYear(), time.getMonth() + 1, 0)
+  if (day == "firstDayMonth")
+    time = new Date(time.getFullYear(), time.getMonth(), 1)
+
   let dd = time.getDate()
   let mo = time.getMonth() + 1
   let yy = time.getFullYear().toString()
@@ -27,6 +33,10 @@ function formatTimeVers(version) {
   version.createdAt = getTime(version.createdAt, "h:m d.m.y")
   version.updatedAt = getTime(version.updatedAt, "h:m d.m.y")
   return version
+}
+
+function getLastDayMonth() {
+  let time = date == "now" ? new Date() : new Date(date)
 }
 
 const myFetch = async (url, data = [], method = "POST") => {

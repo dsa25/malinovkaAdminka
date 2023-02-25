@@ -1,8 +1,31 @@
 <template>
   <section>
     <div class="row">
-      <h1>inspections ...</h1>
-      <!-- <img width="30" src="../../dist/img/logo.png" alt="new_img" /> -->
+      <div class="flex pb-5">
+        <div class="flex items-center">
+          <div>
+            <MyInput
+              :type="'date'"
+              min="2023-01-01"
+              v-model="fromDate"
+              id="from"
+            />
+            <MyInput
+              class="mt-2"
+              :type="'date'"
+              min="2023-01-02"
+              v-model="beforeDate"
+              id="before"
+            />
+          </div>
+          <MyBtn class="btn btn_success btn_svg ml-2" @click="getInspDate()">
+            <svg class="svg_icon">
+              <use xlink:href="@/assets/sprite.svg#calendar_icon"></use>
+            </svg>
+          </MyBtn>
+        </div>
+      </div>
+
       <table class="table">
         <!-- <tr>
           <td></td>
@@ -42,7 +65,7 @@
         <tr v-for="(item, index) in inspections" :key="item.id">
           <td>{{ index }}</td>
           <td>{{ item.address }}</td>
-          <td>{{ item.dateInspection }}</td>
+          <td>{{ item.createdAt }}</td>
           <td>{{ item.numberPU }}</td>
           <td>{{ item.typePU }}</td>
           <td>{{ item.datePU }}</td>
@@ -73,17 +96,34 @@
 
 <script>
 import { ref } from "vue"
+import { getTime } from "@/func"
 import useInspections from "@/hooks/useInspections"
 import MyInput from "../components/UI/MyInput.vue"
 export default {
   components: { MyInput },
   name: "Inspections",
   setup(props) {
-    const { inspections } = useInspections()
+    let fdm = getTime("now", "y-m-d", "firstDayMonth")
+    let ldm = getTime("now", "y-m-d")
 
-    return { inspections }
+    let fromDate = ref(fdm)
+    let beforeDate = ref(ldm)
+
+    const { inspections, getInspections } = useInspections()
+
+    return {
+      inspections,
+      getInspections,
+      fromDate,
+      beforeDate
+    }
+  },
+  methods: {
+    async getInspDate() {
+      let data = { from: this.fromDate, before: this.beforeDate }
+      console.log({ data })
+      await this.getInspections(data)
+    }
   }
 }
 </script>
-
-<style></style>
