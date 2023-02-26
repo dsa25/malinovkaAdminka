@@ -12,6 +12,7 @@ class inspectionsController {
         where =
           "WHERE date(createdAt) BETWEEN date('now', 'start of month') AND date('now')"
       }
+      where += " ORDER BY createdAt ASC"
       let sql = "SELECT * FROM `inspections`" + " " + where
       console.log({ sql })
       let db = await opn()

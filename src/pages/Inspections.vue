@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="row">
-      <div class="flex pb-5">
+      <div class="flex justify-between items-center pb-5">
         <div class="flex items-center">
           <div>
             <MyInput
@@ -24,10 +24,13 @@
             </svg>
           </MyBtn>
         </div>
+
+        <MyBtn class="btn btn_success" @click="saveFile()">save</MyBtn>
       </div>
 
-      <table class="table">
-        <!-- <tr>
+      <div id="wrTable">
+        <table class="table" id="myTable">
+          <!-- <tr>
           <td></td>
           <td><my-input>sdf</my-input></td>
           <td><my-input>sdf</my-input></td>
@@ -39,57 +42,58 @@
           <td><my-input>sdf</my-input></td>
           <td></td>
         </tr> -->
-        <tr>
-          <th>№</th>
-          <th>Адресс</th>
-          <th>Дата осмотра</th>
-          <th>№ ПУ</th>
-          <th>Тип ПУ</th>
-          <th>Дата ПУ</th>
-          <th colspan="3">
-            <table class="tbl_poc">
-              <tr>
-                <td colspan="3">Показания</td>
-              </tr>
-              <tr>
-                <td class="w-[60px]">КП День</td>
-                <td class="w-[60px]">КП Ночи</td>
-                <td class="w-[60px]">Общие</td>
-              </tr>
-            </table>
-          </th>
-          <th>фото</th>
-          <th>user</th>
-          <th>notes</th>
-        </tr>
-        <tr v-for="(item, index) in inspections" :key="item.id">
-          <td>{{ index }}</td>
-          <td>{{ item.address }}</td>
-          <td>{{ item.createdAt }}</td>
-          <td>{{ item.numberPU }}</td>
-          <td>{{ item.typePU }}</td>
-          <td>{{ item.datePU }}</td>
-          <td class="w-[60px]">{{ item.kpDay }}</td>
-          <td class="w-[60px]">{{ item.kpNight }}</td>
-          <td class="w-[60px]">{{ item.kpTotal }}</td>
-          <td>
-            <a
-              v-for="src in item.srcPhoto"
-              :key="src"
-              :href="src"
-              class="m-1 inline-block"
-              target="_blank"
-            >
-              <img style="width: 20px; height: auto" :src="src" alt="img" />
-            </a>
-          </td>
-          <td>{{ item.user }}</td>
-          <td>{{ item.notation }}</td>
-        </tr>
-        <tr v-if="inspections.length == 0">
-          <td colspan="12" class="py-3">not data</td>
-        </tr>
-      </table>
+          <tr>
+            <th>№</th>
+            <th>Адресс</th>
+            <th>Дата осмотра</th>
+            <th>№ ПУ</th>
+            <th>Тип ПУ</th>
+            <th>Дата ПУ</th>
+            <th colspan="3">
+              <table class="tbl_poc">
+                <tr>
+                  <td colspan="3">Показания</td>
+                </tr>
+                <tr>
+                  <td class="w-[60px]">КП День</td>
+                  <td class="w-[60px]">КП Ночи</td>
+                  <td class="w-[60px]">Общие</td>
+                </tr>
+              </table>
+            </th>
+            <th>фото</th>
+            <th>user</th>
+            <th>notes</th>
+          </tr>
+          <tr v-for="(item, index) in inspections" :key="item.id">
+            <td>{{ index }}</td>
+            <td>{{ item.address }}</td>
+            <td>{{ item.createdAt }}</td>
+            <td>{{ item.numberPU }}</td>
+            <td>{{ item.typePU }}</td>
+            <td>{{ item.datePU }}</td>
+            <td class="w-[60px]">{{ item.kpDay }}</td>
+            <td class="w-[60px]">{{ item.kpNight }}</td>
+            <td class="w-[60px]">{{ item.kpTotal }}</td>
+            <td>
+              <a
+                v-for="src in item.srcPhoto"
+                :key="src"
+                :href="src"
+                class="m-1 inline-block"
+                target="_blank"
+              >
+                <img style="width: 20px; height: auto" :src="src" alt="img" />
+              </a>
+            </td>
+            <td>{{ item.user }}</td>
+            <td>{{ item.notation }}</td>
+          </tr>
+          <tr v-if="inspections.length == 0">
+            <td colspan="12" class="py-3">not data</td>
+          </tr>
+        </table>
+      </div>
     </div>
   </section>
 </template>
@@ -123,6 +127,25 @@ export default {
       let data = { from: this.fromDate, before: this.beforeDate }
       console.log({ data })
       await this.getInspections(data)
+    },
+    saveFile() {
+      console.log("click save.....")
+      console.log(myTable)
+      const html = wrTable.innerHTML
+      const name = "myTable.html"
+      console.log(html)
+      // return
+
+      const b = new Blob([html], { type: "text/html" })
+      const url = window.URL.createObjectURL(b)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = name || "text.html"
+      a.type = "text/html"
+      a.addEventListener("click", () => {
+        setTimeout(() => window.URL.revokeObjectURL(url), 1000)
+      })
+      a.click()
     }
   }
 }
