@@ -68,6 +68,15 @@ header {
 .table > tr > td {
   border: 1px solid #89b289;
 }
+.trDuplicate {
+  @apply bg-blue-100;
+}
+.trEmpty {
+  @apply bg-red-100;
+}
+.trGreen {
+  @apply bg-green-100;
+}
 .tbl_poc td {
   padding: 0 3px;
 }

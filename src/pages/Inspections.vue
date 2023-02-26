@@ -25,11 +25,58 @@
           </MyBtn>
         </div>
 
-        <MyBtn class="btn btn_success" @click="saveFile()">save</MyBtn>
+        <table class="table tableHead">
+          <tr>
+            <td>участки</td>
+            <td>осмотры</td>
+            <td>
+              <MyBtn class="btn btn_min2 btn_danger" @click="runTable('empty')">
+                пустые
+              </MyBtn>
+            </td>
+            <td>
+              <MyBtn
+                class="btn btn_min2 btn_success"
+                @click="runTable('sector')"
+              >
+                по участкам
+              </MyBtn>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ sectors.length }}</td>
+            <td>{{ inspections.length }}</td>
+            <th>{{ getEmptySectors.length }}</th>
+            <th>повторы: {{ listDuplicate.length }}</th>
+          </tr>
+        </table>
+
+        <div class="flex flex-col">
+          <div>
+            <MyBtn class="btn btn_svg btn_success" @click="saveFile()">
+              <svg class="svg_icon">
+                <use xlink:href="@/assets/sprite.svg#save"></use>
+              </svg>
+            </MyBtn>
+            <span class="ml-1">save</span>
+          </div>
+          <div>
+            <MyBtn class="btn btn_svg btn_success mt-2" @click="saveXls()">
+              <svg class="svg_icon">
+                <use xlink:href="@/assets/sprite.svg#save"></use>
+              </svg>
+            </MyBtn>
+            <span class="ml-1">save xls</span>
+          </div>
+        </div>
       </div>
 
-      <div id="wrTable">
-        <table class="table" id="myTable">
+      <div id="wrMyTable" ref="wrTable">
+        <table
+          v-if="emptySectors == false"
+          class="table tableTest"
+          id="myTable"
+        >
           <!-- <tr>
           <td></td>
           <td><my-input>sdf</my-input></td>
@@ -44,6 +91,7 @@
         </tr> -->
           <tr>
             <th>№</th>
+            <th>id участка</th>
             <th>Адресс</th>
             <th>Дата осмотра</th>
             <th>№ ПУ</th>
@@ -65,10 +113,17 @@
             <th>user</th>
             <th>notes</th>
           </tr>
-          <tr v-for="(item, index) in inspections" :key="item.id">
-            <td>{{ index }}</td>
-            <td>{{ item.address }}</td>
-            <td>{{ item.createdAt }}</td>
+          <tr
+            v-for="(item, index) in sortedInspections"
+            :key="item.id"
+            :class="{
+              trDuplicate: listDuplicate.includes(item.idSector)
+            }"
+          >
+            <td>{{ index + 1 }}</td>
+            <td>{{ item.idSector }}</td>
+            <td>{{ item.street }} {{ item.houseNum }} {{ item.litera }}</td>
+            <td>{{ myTime(item.createdAt, "d.m.y") }}</td>
             <td>{{ item.numberPU }}</td>
             <td>{{ item.typePU }}</td>
             <td>{{ item.datePU }}</td>
@@ -89,8 +144,34 @@
             <td>{{ item.user }}</td>
             <td>{{ item.notation }}</td>
           </tr>
-          <tr v-if="inspections.length == 0">
-            <td colspan="12" class="py-3">not data</td>
+          <tr v-if="inspections.length == 0" class="trEmpty">
+            <td colspan="13" class="py-3">not data</td>
+          </tr>
+        </table>
+
+        <table v-if="emptySectors" class="table tableTest" id="myTable">
+          <tr>
+            <th>№</th>
+            <th>участок(id)</th>
+            <th>Лиц.счет</th>
+            <th>Адресс</th>
+            <th>№ ПУ</th>
+            <th>Тип ПУ</th>
+          </tr>
+          <tr
+            v-for="(item, index) in getEmptySectors"
+            :key="item.id"
+            class="trEmpty"
+          >
+            <td>{{ index + 1 }}</td>
+            <td>{{ item.id }}</td>
+            <td>{{ item.persNum }}</td>
+            <td>{{ item.street }} {{ item.houseNum }} {{ item.litera }}</td>
+            <td>{{ item.numberPU }}</td>
+            <td>{{ item.typePU }}</td>
+          </tr>
+          <tr v-if="inspections.length == 0" class="trGreen">
+            <td colspan="6" class="py-3">not data</td>
           </tr>
         </table>
       </div>
@@ -99,9 +180,10 @@
 </template>
 
 <script>
-import { ref } from "vue"
+import { ref, computed } from "vue"
 import { getTime } from "@/func"
 import useInspections from "@/hooks/useInspections"
+import useSectors from "@/hooks/useSectors"
 import MyInput from "../components/UI/MyInput.vue"
 export default {
   components: { MyInput },
@@ -113,25 +195,56 @@ export default {
     let fromDate = ref(fdm)
     let beforeDate = ref(ldm)
 
-    const { inspections, getInspections } = useInspections()
+    let emptySectors = ref(false)
+
+    const {
+      inspections,
+      getInspections,
+      typeSort,
+      sortedInspections,
+      getEmptySectors,
+      listDuplicate,
+      listSectors
+    } = useInspections()
+    const { sectors } = useSectors()
 
     return {
       inspections,
       getInspections,
+      listDuplicate,
+      listSectors,
+      typeSort,
+      sortedInspections,
+      getEmptySectors,
+      emptySectors,
       fromDate,
-      beforeDate
+      beforeDate,
+      sectors
     }
   },
   methods: {
     async getInspDate() {
+      this.emptySectors = false
       let data = { from: this.fromDate, before: this.beforeDate }
       console.log({ data })
       await this.getInspections(data)
     },
+    myTime(date = "now", format = "d.m.y") {
+      return getTime(date, format)
+    },
+    runTable(type) {
+      if (type == "sector") {
+        this.emptySectors = false
+        this.typeSort = "sector"
+      }
+      if (type == "empty") {
+        this.emptySectors = true
+        this.listSectors = this.sectors
+      }
+    },
     saveFile() {
       console.log("click save.....")
-      console.log(myTable)
-      const html = wrTable.innerHTML
+      const html = this.$refs.wrTable.innerHTML
       const name = "myTable.html"
       console.log(html)
       // return
@@ -146,6 +259,39 @@ export default {
         setTimeout(() => window.URL.revokeObjectURL(url), 1000)
       })
       a.click()
+    },
+    saveXls() {
+      console.log("click save..xls...")
+
+      const uri = "data:application/vnd.ms-excel;base64,"
+      const template =
+        '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+      const base64 = (s) => {
+        return window.btoa(unescape(encodeURIComponent(s)))
+      }
+      const format = (s, c) => {
+        return s.replace(/{(\w+)}/g, function (m, p) {
+          return c[p]
+        })
+      }
+      const downloadURI = (uri, name) => {
+        var link = document.createElement("a")
+        link.download = name
+        link.href = uri
+        link.click()
+      }
+
+      const run = (table, name, fileName) => {
+        var ctx = {
+          worksheet: name || "Worksheet",
+          table: table.innerHTML
+        }
+        var resuri = uri + base64(format(template, ctx))
+        downloadURI(resuri, fileName)
+      }
+
+      let table = document.getElementById("myTable")
+      run(table, "Осмотры", `Осмотр_${getTime("now", "d.m.y")}.xls`)
     }
   }
 }

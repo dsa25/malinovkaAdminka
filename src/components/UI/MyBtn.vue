@@ -22,6 +22,13 @@ export default {
   padding: 0 12px;
   line-height: 25px;
 }
+.btn_min2 {
+  font-size: 12px;
+  height: 20px;
+  padding: 0 10px;
+  line-height: 20px;
+  border-radius: 2px;
+}
 .btn.block {
   display: block;
 }

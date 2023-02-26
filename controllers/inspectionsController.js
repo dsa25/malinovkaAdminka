@@ -5,6 +5,27 @@ class inspectionsController {
   async getInspections(req, reply) {
     try {
       console.log("body", req.body.from)
+      let select = `
+        SELECT 
+        inspections.id,
+        inspections.idSector,
+        inspections.user,
+        inspections.datePU,
+        inspections.kpDay,
+        inspections.kpNight,
+        inspections.kpTotal,
+        inspections.srcPhoto,
+        inspections.notation,
+        inspections.createdAt,
+        sectors.persNum,
+        sectors.nameVillage,
+        sectors.street,
+        sectors.houseNum,
+        sectors.litera,
+        sectors.numberPU,
+        sectors.typePU 
+        FROM inspections`
+      let join = "JOIN sectors ON sectors.id = inspections.idSector"
       let where = ""
       if (req.body?.from && req.body?.before) {
         where = `WHERE date(createdAt) BETWEEN date('${req.body.from.trim()}') AND  date('${req.body.before.trim()}')`
@@ -12,8 +33,8 @@ class inspectionsController {
         where =
           "WHERE date(createdAt) BETWEEN date('now', 'start of month') AND date('now')"
       }
-      where += " ORDER BY createdAt ASC"
-      let sql = "SELECT * FROM `inspections`" + " " + where
+      let order = "ORDER BY createdAt ASC"
+      let sql = `${select} ${join} ${where} ${order}`
       console.log({ sql })
       let db = await opn()
       let res = await db.all(sql)
