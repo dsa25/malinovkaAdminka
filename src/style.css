@@ -30,7 +30,7 @@ a:hover {
 body {
   margin: 0;
   padding: 0;
-  min-width: 320px;
+  min-width: 1280px;
 }
 
 #app {
@@ -42,7 +42,7 @@ body {
   margin: 0 auto;
   padding-left: 15px;
   padding-right: 15px;
-  max-width: 1024px;
+  max-width: 1280px;
 }
 
 header {
@@ -53,6 +53,20 @@ header {
   display: inline-block;
   max-width: 100%;
   max-height: 100%;
+}
+.count_photo {
+  display: inline-block;
+  white-space: nowrap;
+  width: auto;
+  height: 22px;
+  cursor: pointer;
+}
+.count_photo:hover {
+  opacity: 0.7;
+}
+.count_photo svg {
+  width: 22px;
+  margin: 0 0 5px 3px;
 }
 
 .table {
@@ -67,16 +81,34 @@ header {
 .table > tr > th,
 .table > tr > td {
   border: 1px solid #89b289;
+  padding: 2px 5px;
+}
+
+.table:not(.tableHead) tr:nth-child(odd) {
+  background-color: #fff;
+}
+.table:not(.tableHead) tr:nth-child(even) {
+  background-color: #f8f8f8;
+}
+.table:not(.tableHead) tr:first-child {
+  background-color: transparent !important;
+}
+.table:not(.tableHead) tr:first-child th {
+  background-color: #ededed !important;
+}
+.table:not(.tableHead) tr:not(:first-child):hover {
+  color: #f56693;
 }
 .trDuplicate {
-  @apply bg-blue-100;
+  @apply bg-blue-100 !important;
 }
 .trEmpty {
-  @apply bg-red-100;
+  @apply bg-red-100 !important;
 }
 .trGreen {
-  @apply bg-green-100;
+  @apply bg-green-100 !important;
 }
+
 .tbl_poc td {
   padding: 0 3px;
 }

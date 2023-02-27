@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="inspectionsPage">
     <div class="row">
       <div class="flex justify-between items-center pb-5">
         <div class="flex items-center">
@@ -72,45 +72,23 @@
       </div>
 
       <div id="wrMyTable" ref="wrTable">
-        <table
-          v-if="emptySectors == false"
-          class="table tableTest"
-          id="myTable"
-        >
-          <!-- <tr>
-          <td></td>
-          <td><my-input>sdf</my-input></td>
-          <td><my-input>sdf</my-input></td>
-          <td><my-input>sdf</my-input></td>
-          <td><my-input>sdf</my-input></td>
-          <td><my-input>sdf</my-input></td>
-          <td colspan="3"><my-input>sdf</my-input></td>
-          <td></td>
-          <td><my-input>sdf</my-input></td>
-          <td></td>
-        </tr> -->
-          <tr>
+        <table v-if="emptySectors == false" class="table" id="myTable">
+          <tr class="head_tbl head_th">
             <th>№</th>
             <th>id участка</th>
-            <th>Адресс</th>
-            <th>Дата осмотра</th>
+            <th>Лиц.счет</th>
+            <th>Улица</th>
+            <th>№ дома</th>
+            <th>Литера</th>
             <th>№ ПУ</th>
             <th>Тип ПУ</th>
-            <th>Дата ПУ</th>
-            <th colspan="3">
-              <table class="tbl_poc">
-                <tr>
-                  <td colspan="3">Показания</td>
-                </tr>
-                <tr>
-                  <td class="w-[60px]">КП День</td>
-                  <td class="w-[60px]">КП Ночи</td>
-                  <td class="w-[60px]">Общие</td>
-                </tr>
-              </table>
-            </th>
-            <th>фото</th>
+            <th>Дата осмотра</th>
+            <th>КП.День</th>
+            <th>КП.Ночь</th>
+            <th>Общие</th>
             <th>user</th>
+            <th>фото</th>
+            <th>Дата ПУ</th>
             <th>notes</th>
           </tr>
           <tr
@@ -121,35 +99,41 @@
             }"
           >
             <td>{{ index + 1 }}</td>
-            <td>{{ item.idSector }}</td>
-            <td>{{ item.street }} {{ item.houseNum }} {{ item.litera }}</td>
-            <td>{{ myTime(item.createdAt, "d.m.y") }}</td>
+            <td>
+              <a :href="'/sectors/' + item.idSector">{{ item.idSector }}</a>
+            </td>
+            <td>{{ item.persNum }}</td>
+            <td>{{ item.street }}</td>
+            <td>{{ item.houseNum }}</td>
+            <td>{{ item.litera }}</td>
             <td>{{ item.numberPU }}</td>
             <td>{{ item.typePU }}</td>
-            <td>{{ item.datePU }}</td>
+            <td>{{ myTime(item.createdAt, "d.m.y") }}</td>
             <td class="w-[60px]">{{ item.kpDay }}</td>
             <td class="w-[60px]">{{ item.kpNight }}</td>
             <td class="w-[60px]">{{ item.kpTotal }}</td>
+            <td>{{ item.user }}</td>
             <td>
               <a
-                v-for="src in item.srcPhoto"
-                :key="src"
-                :href="src"
-                class="m-1 inline-block"
-                target="_blank"
+                :href="'/sectors/' + item.idSector"
+                class="count_photo"
+                v-if="item.srcPhoto.length"
               >
-                <img style="width: 20px; height: auto" :src="src" alt="img" />
+                <span>{{ item.srcPhoto.length }}</span>
+                <svg class="svg_icon">
+                  <use xlink:href="@/assets/sprite.svg#camera"></use>
+                </svg>
               </a>
             </td>
-            <td>{{ item.user }}</td>
+            <td>{{ item.datePU }}</td>
             <td>{{ item.notation }}</td>
           </tr>
           <tr v-if="inspections.length == 0" class="trEmpty">
-            <td colspan="13" class="py-3">not data</td>
+            <td colspan="16" class="py-3">not data</td>
           </tr>
         </table>
 
-        <table v-if="emptySectors" class="table tableTest" id="myTable">
+        <table v-if="emptySectors" class="table" id="myTable">
           <tr>
             <th>№</th>
             <th>участок(id)</th>

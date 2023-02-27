@@ -136,6 +136,42 @@ class inspectionsController {
       console.log(error)
     }
   }
+
+  async getSector(req, reply) {
+    try {
+      console.log("body", req.body)
+      if (req.body.idSector == undefined) {
+        return reply.send(
+          JSON.stringify({
+            status: 0,
+            body: {},
+            msg: "не передан параметр!"
+          })
+        )
+      }
+      let args = [req.body.idSector.trim()]
+      let sql =
+        "SELECT * FROM `inspections` WHERE active = 1 AND idSector = ? ORDER BY id DESC"
+      let db = await opn()
+      let res = await db.all(sql, args)
+      return reply.send(
+        JSON.stringify({
+          status: 1,
+          body: res,
+          msg: `История осмотров ${req.body.idSector} участка`
+        })
+      )
+    } catch (error) {
+      console.log(error)
+      return reply.send(
+        JSON.stringify({
+          status: 0,
+          body: {},
+          msg: "Ошибка сервера (cathc)!"
+        })
+      )
+    }
+  }
 }
 
 function getTime(type = "dd.mm.yyyy") {
