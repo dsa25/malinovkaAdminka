@@ -11,6 +11,7 @@ const IP = "0.0.0.0"
 const userController = require("./controllers/userController")
 const sectorController = require("./controllers/sectorController")
 const inspectionsController = require("./controllers/inspectionsController")
+const settingsController = require("./controllers/settingsController")
 
 const fastifyStatic = require("@fastify/static")
 const path = require("path")
@@ -93,6 +94,12 @@ app.register((app, opts, done) => {
   app.post("/historySector", inspectionsController.getSector)
   app.post("/saveInsp", inspectionsController.updateInspection)
   app.post("/deleteInsp", inspectionsController.removeInspection)
+  app.post("/getSize", async (req, reply) =>
+    settingsController.getSizeImgs(req, reply)
+  )
+  app.post("/clearOldImgs", async (req, reply) =>
+    settingsController.removeImgs(req, reply)
+  )
 
   done()
 })

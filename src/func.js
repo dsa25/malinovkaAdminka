@@ -1,4 +1,4 @@
-export { myFetch, getTime, deepClone, formatTimeVers }
+export { myFetch, getTime, deepClone, formatTimeVers, formatBytes }
 
 function deepClone(obj) {
   return JSON.parse(JSON.stringify(obj))
@@ -27,6 +27,18 @@ function getTime(date = "now", format = "d.m.y", day = undefined) {
   if (format == "h:m:s d.m.y") return `${hh}:${mm}:${ss} ${dd}.${mo}.${yy}`
   if (format === "y-m-d") return `${yy}-${mo}-${dd}`
   else return `${dd}.${mo}.${yy}`
+}
+
+function formatBytes(bytes, decimals = 2) {
+  if (bytes === 0) {
+    return "0"
+  } else {
+    var k = 1024
+    var dm = decimals < 0 ? 0 : decimals
+    var sizes = ["байт", "КБ", "МБ", "ГБ", "ТБ"]
+    var i = Math.floor(Math.log(bytes) / Math.log(k))
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
+  }
 }
 
 function formatTimeVers(version) {

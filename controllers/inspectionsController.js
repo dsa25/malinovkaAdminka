@@ -1,8 +1,10 @@
 let { opn } = require("../database/connect")
 const fs = require("fs").promises
+const { getTime } = require("./func")
 
 class inspectionsController {
   async getInspections(req, reply) {
+    console.log(req.body.from, req.body.before)
     try {
       let select = `
         SELECT 
@@ -277,18 +279,6 @@ class inspectionsController {
       )
     }
   }
-}
-
-function getTime(type = "dd.mm.yyyy") {
-  let time = new Date()
-  let dd = time.getDate()
-  let mm = time.getMonth() + 1
-  let yy = time.getFullYear().toString()
-  if (mm < 10) mm = "0" + mm
-  if (dd < 10) dd = "0" + dd
-
-  if (type === "yyyy-mm-dd") return `${yy}-${mm}-${dd}`
-  else return `${dd}.${mm}.${yy}`
 }
 
 module.exports = new inspectionsController()

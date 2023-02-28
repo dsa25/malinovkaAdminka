@@ -1,22 +1,43 @@
 <template>
   <section>
     <div class="row">
-      <table class="table tableHead mb-7">
-        <tr>
-          <td>page</td>
-          <td>count</td>
-          <td>version</td>
-          <td>update</td>
-          <td>create</td>
-        </tr>
-        <tr>
-          <th>{{ versionUs.name }}</th>
-          <td>{{ users.length }}</td>
-          <td>{{ versionUs.version }}</td>
-          <td>{{ versionUs.updatedAt }}</td>
-          <td>{{ versionUs.createdAt }}</td>
-        </tr>
-      </table>
+      <div class="flex items-center justify-between">
+        <table class="table tableHead mb-7">
+          <tr>
+            <td>page</td>
+            <td>count</td>
+            <td>version</td>
+            <td>update</td>
+            <td>create</td>
+          </tr>
+          <tr>
+            <th>{{ versionUs.name }}</th>
+            <td>{{ users.length }}</td>
+            <td>{{ versionUs.version }}</td>
+            <td>{{ versionUs.updatedAt }}</td>
+            <td>{{ versionUs.createdAt }}</td>
+          </tr>
+        </table>
+
+        <table class="table tableHead mb-7">
+          <tr>
+            <td>БД</td>
+            <td>Фотки</td>
+            <td>чистка</td>
+            <td>
+              <MyBtn class="btn btn_min2 btn_success" @click="clearImgs()">
+                очистить
+              </MyBtn>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ myFormatBytes(size.sizeDB) }}</td>
+            <th>{{ myFormatBytes(size.sizeImgs) }}</th>
+            <td>{{ size.vers?.updatedAt }}</td>
+            <td>{{ size.vers?.version }}</td>
+          </tr>
+        </table>
+      </div>
 
       <div class="flex justify-between items-center text-center py-1">
         <div class="w-1/12">id</div>
@@ -85,6 +106,7 @@
 
 <script>
 import { ref } from "vue"
+import { getTime, formatBytes } from "@/func"
 import useUsers from "@/hooks/useUsers"
 export default {
   name: "Users",
@@ -103,9 +125,10 @@ export default {
     }
   },
   setup(props) {
-    const { users, versionUs, addUser, updateUser } = useUsers()
+    const { size, clearOldImgs, users, versionUs, addUser, updateUser } =
+      useUsers()
 
-    return { users, versionUs, addUser, updateUser }
+    return { size, clearOldImgs, users, versionUs, addUser, updateUser }
   },
   methods: {
     async addUser() {
@@ -128,6 +151,16 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    async clearImgs() {
+      console.log("click clear")
+      await this.clearOldImgs()
+    },
+    myTime(date = "now", format = "d.m.y") {
+      return getTime(date, format)
+    },
+    myFormatBytes(bytes, decimals = 2) {
+      return formatBytes(bytes, decimals)
     }
   }
 }

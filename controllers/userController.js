@@ -147,7 +147,7 @@ class userController {
       // resq { stmt: Statement { stmt: undefined }, lastID: 0, changes: 23 }
       // console.log("truncate", truncate)
       let sql =
-        "INSERT INTO versions (`name`, `version`) VALUES ('users', 0), ('sectors', 0)"
+        "INSERT INTO versions (`name`, `version`) VALUES ('users', 0), ('sectors', 0), ('images', 0)"
       let res = await db.run(sql)
       // { stmt: Statement { stmt: undefined }, lastID: 6, changes: 3 }
       if (res && res?.lastID > 0 && res?.changes > 0) {
