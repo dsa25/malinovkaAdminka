@@ -91,6 +91,8 @@ app.register((app, opts, done) => {
   app.post("/addInspect", bLimit, inspectionsController.addInspect)
   app.post("/getInspects", bLimit, inspectionsController.getInspections)
   app.post("/historySector", inspectionsController.getSector)
+  app.post("/saveInsp", inspectionsController.updateInspection)
+  app.post("/deleteInsp", inspectionsController.removeInspection)
 
   done()
 })

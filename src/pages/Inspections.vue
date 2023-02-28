@@ -100,7 +100,9 @@
           >
             <td>{{ index + 1 }}</td>
             <td>
-              <a :href="'/sectors/' + item.idSector">{{ item.idSector }}</a>
+              <a :href="'/sectors/' + sectors.length + '/' + item.idSector">{{
+                item.idSector
+              }}</a>
             </td>
             <td>{{ item.persNum }}</td>
             <td>{{ item.street }}</td>
@@ -115,7 +117,7 @@
             <td>{{ item.user }}</td>
             <td>
               <a
-                :href="'/sectors/' + item.idSector"
+                :href="'/sectors/' + sectors.length + '/' + item.idSector"
                 class="count_photo"
                 v-if="item.srcPhoto.length"
               >

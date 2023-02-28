@@ -4,7 +4,6 @@ const fs = require("fs").promises
 class inspectionsController {
   async getInspections(req, reply) {
     try {
-      console.log("body", req.body.from)
       let select = `
         SELECT 
         inspections.id,
@@ -17,6 +16,7 @@ class inspectionsController {
         inspections.srcPhoto,
         inspections.notation,
         inspections.createdAt,
+        inspections.active,
         sectors.persNum,
         sectors.nameVillage,
         sectors.street,
@@ -26,16 +26,16 @@ class inspectionsController {
         sectors.typePU 
         FROM inspections`
       let join = "JOIN sectors ON sectors.id = inspections.idSector"
-      let where = ""
+      let where = "WHERE inspections.active = 1 "
       if (req.body?.from && req.body?.before) {
-        where = `WHERE date(createdAt) BETWEEN date('${req.body.from.trim()}') AND  date('${req.body.before.trim()}')`
+        where += ` AND date(createdAt) BETWEEN date('${req.body.from.trim()}') AND  date('${req.body.before.trim()}')`
       } else {
-        where =
-          "WHERE date(createdAt) BETWEEN date('now', 'start of month') AND date('now')"
+        where +=
+          " AND date(createdAt) BETWEEN date('now', 'start of month') AND date('now')"
       }
       let order = "ORDER BY createdAt ASC"
       let sql = `${select} ${join} ${where} ${order}`
-      console.log({ sql })
+      // console.log({ sql })
       let db = await opn()
       let res = await db.all(sql)
       return reply.send(
@@ -139,7 +139,6 @@ class inspectionsController {
 
   async getSector(req, reply) {
     try {
-      console.log("body", req.body)
       if (req.body.idSector == undefined) {
         return reply.send(
           JSON.stringify({
@@ -168,6 +167,112 @@ class inspectionsController {
           status: 0,
           body: {},
           msg: "Ошибка сервера (cathc)!"
+        })
+      )
+    }
+  }
+
+  async removeInspection(req, reply) {
+    try {
+      if (
+        req.body == undefined ||
+        req.body?.id < 1 ||
+        req.body.id == undefined
+      ) {
+        return reply.send(
+          JSON.stringify({
+            status: 0,
+            body: {},
+            msg: "не передан параметр!"
+          })
+        )
+      }
+      let args = [req.body.id]
+      let sql = "UPDATE inspections SET active= 0 WHERE id= ?"
+      let db = await opn()
+      let res = await db.run(sql, args)
+      // res { stmt: Statement { stmt: undefined }, lastID: 0, changes: 1 }
+      console.log("res", res)
+      if (res && res?.changes == 1) {
+        return reply.send(
+          JSON.stringify({
+            status: 1,
+            body: {},
+            msg: "Осмотр удален!"
+          })
+        )
+      }
+      return reply.send(
+        JSON.stringify({
+          status: 0,
+          body: {},
+          msg: "что то пошло не так!"
+        })
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async updateInspection(req, reply) {
+    try {
+      if (req.body == undefined) {
+        return reply.send(
+          JSON.stringify({
+            status: 0,
+            body: {},
+            msg: "не передан параметр!"
+          })
+        )
+      }
+      // console.log(req.body)
+      let idSector = String(req.body?.idSector).trim()
+      let kpDay = String(req.body?.kpDay).trim()
+      let kpNight = String(req.body?.kpNight).trim()
+      let kpTotal = String(req.body?.kpTotal).trim()
+      if (
+        idSector.length == 0 ||
+        req.body.id < 1 ||
+        (kpDay.length == 0 && kpNight.length == 0 && kpTotal.length == 0)
+      ) {
+        return reply.send(
+          JSON.stringify({
+            status: 0,
+            body: {},
+            msg: "не все поля заполнены!"
+          })
+        )
+      }
+      let args = [idSector, kpDay, kpNight, kpTotal, req.body.id]
+      let sql =
+        "UPDATE inspections SET idSector= ?, kpDay= ?, kpNight= ?, kpTotal= ? WHERE id= ?"
+      let db = await opn()
+      let res = await db.run(sql, args)
+      // res { stmt: Statement { stmt: undefined }, lastID: 0, changes: 1 }
+      console.log("res", res)
+      if (res && res?.changes == 1) {
+        return reply.send(
+          JSON.stringify({
+            status: 1,
+            body: {},
+            msg: "Изменения сохранены!"
+          })
+        )
+      }
+      return reply.send(
+        JSON.stringify({
+          status: 0,
+          body: {},
+          msg: "что то пошло не так!"
+        })
+      )
+    } catch (error) {
+      console.log(error)
+      return reply.send(
+        JSON.stringify({
+          status: 0,
+          body: {},
+          msg: "что то пошло не так (catch)!"
         })
       )
     }

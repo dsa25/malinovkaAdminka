@@ -30,7 +30,7 @@ const router = createRouter({
     },
     {
       name: "HistorySector",
-      path: "/sectors/:idSector",
+      path: "/sectors/:countSectors/:idSector",
       component: HistorySector
     }
   ]
