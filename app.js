@@ -40,7 +40,10 @@ app.register((app, opts, done) => {
   app.get("/users", async (req, reply) => {
     return reply.sendFile("index.html")
   })
-  app.get("/sectors/:test1/:test2", async (req, reply) => {
+  app.get("/sectors", async (req, reply) => {
+    return reply.sendFile("index.html")
+  })
+  app.get("/sectors/*", async (req, reply) => {
     return reply.sendFile("index.html")
   })
 
