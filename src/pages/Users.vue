@@ -1,8 +1,8 @@
 <template>
   <section>
     <div class="row">
-      <div class="flex items-center justify-between">
-        <table class="table tableHead mb-7">
+      <div class="flex items-center justify-between pb-7">
+        <table class="table tableHead">
           <tr>
             <td>page</td>
             <td>count</td>
@@ -19,13 +19,25 @@
           </tr>
         </table>
 
-        <table class="table tableHead mb-7">
+        <table class="table tableHead">
           <tr>
             <td>БД</td>
             <td>Фотки</td>
-            <td>чистка</td>
-            <td>
-              <MyBtn class="btn btn_min2 btn_success" @click="clearImgs()">
+            <td>Фото доступны с:</td>
+            <td class="w-[90px]">
+              <img
+                v-if="loadingClear"
+                src="@/assets/spinner.svg"
+                alt="spinner"
+                width="30"
+                height="30"
+                class="spinner"
+              />
+              <MyBtn
+                v-if="!loadingClear"
+                class="btn btn_min2 btn_success"
+                @click="clearImgs()"
+              >
                 очистить
               </MyBtn>
             </td>
@@ -88,18 +100,6 @@
           <MyBtn @click="addUser" class="btn btn_success">Добавить</MyBtn>
         </div>
       </div>
-
-      <div class="text-[12px] text-red-600 mt-5">
-        <p>
-          * Нельзя менять ФИО одного пользователя на другого! Иначе будет
-          путаница в участниках прошлых осмотров
-        </p>
-        <p>* Если нужен новый - добавляем его</p>
-        <p>
-          * Если нужно убрать(удалить) из списка в приложении - меняем статус на
-          0
-        </p>
-      </div>
     </div>
   </section>
 </template>
@@ -121,7 +121,8 @@ export default {
         id: 0,
         fio: "",
         status: -1
-      }
+      },
+      loadingClear: false
     }
   },
   setup(props) {
@@ -153,8 +154,10 @@ export default {
       }
     },
     async clearImgs() {
+      this.loadingClear = true
       console.log("click clear")
       await this.clearOldImgs()
+      this.loadingClear = false
     },
     myTime(date = "now", format = "d.m.y") {
       return getTime(date, format)

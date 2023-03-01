@@ -1,4 +1,4 @@
-module.exports = { getTime }
+module.exports = { getTime, sleep }
 
 function getTime(date = "now", format = "d.m.y", day = undefined) {
   let time = date == "now" ? new Date() : new Date(date)
@@ -23,4 +23,9 @@ function getTime(date = "now", format = "d.m.y", day = undefined) {
   if (format == "h:m:s d.m.y") return `${hh}:${mm}:${ss} ${dd}.${mo}.${yy}`
   if (format === "y-m-d") return `${yy}-${mo}-${dd}`
   else return `${dd}.${mo}.${yy}`
+}
+
+// await sleep(2000)
+function sleep(n) {
+  return new Promise((resolve) => setTimeout(resolve, n))
 }

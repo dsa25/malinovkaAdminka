@@ -50,10 +50,11 @@ export default function useUsers(props) {
       let data = { date: size.value.vers?.updatedAt }
       const res = await myFetch(`${BASE_URL.value}/clearOldImgs`, data)
       console.log("clearOl", res)
-      return
       if (res?.status == 1) {
-        versionUs.value = formatTimeVers(res.body.version[0])
-        console.log("finish user", users.value)
+        size.value.sizeDB = res.body.sizeDB
+        size.value.sizeImgs = res.body.sizeImgs
+        size.value.vers = formatTimeVers(res.body.version[0])
+        alert(res.msg)
         return
       } else return alert(res.msg)
     } catch (e) {

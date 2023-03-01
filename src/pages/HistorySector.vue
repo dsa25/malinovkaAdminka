@@ -84,7 +84,7 @@
           </td>
           <td>
             <div
-              class="flex"
+              class="flex justify-center"
               v-if="currentMonth(myTime(item.createdAt, 'd.m.y'))"
             >
               <MyBtn

@@ -148,3 +148,6 @@ tr.head_tbl {
 .read_tbl input {
   max-width: 70px;
 }
+.spinner {
+  display: inline-block;
+}

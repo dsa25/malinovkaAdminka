@@ -51,23 +51,17 @@
           </tr>
         </table>
 
-        <div class="flex flex-col">
-          <div>
-            <MyBtn class="btn btn_svg btn_success" @click="saveFile()">
-              <svg class="svg_icon">
-                <use xlink:href="@/assets/sprite.svg#save"></use>
-              </svg>
-            </MyBtn>
-            <span class="ml-1">save</span>
-          </div>
-          <div>
-            <MyBtn class="btn btn_svg btn_success mt-2" @click="saveXls()">
-              <svg class="svg_icon">
-                <use xlink:href="@/assets/sprite.svg#save"></use>
-              </svg>
-            </MyBtn>
+        <div class="w-[120px]">
+          <MyBtn
+            class="btn btn_success mt-2"
+            @click="saveXls()"
+            alt="Скачать в Excel"
+          >
+            <svg class="svg_icon w-[30px]">
+              <use xlink:href="@/assets/sprite.svg#install_app"></use>
+            </svg>
             <span class="ml-1">save xls</span>
-          </div>
+          </MyBtn>
         </div>
       </div>
 
@@ -190,6 +184,7 @@ export default {
       sortedInspections,
       getEmptySectors,
       listDuplicate,
+      downloadFileXls,
       listSectors
     } = useInspections()
     const { sectors } = useSectors()
@@ -205,6 +200,7 @@ export default {
       emptySectors,
       fromDate,
       beforeDate,
+      downloadFileXls,
       sectors
     }
   },
@@ -228,56 +224,14 @@ export default {
         this.listSectors = this.sectors
       }
     },
-    saveFile() {
-      console.log("click save.....")
-      const html = this.$refs.wrTable.innerHTML
-      const name = "myTable.html"
-      console.log(html)
-      // return
-
-      const b = new Blob([html], { type: "text/html" })
-      const url = window.URL.createObjectURL(b)
-      const a = document.createElement("a")
-      a.href = url
-      a.download = name || "text.html"
-      a.type = "text/html"
-      a.addEventListener("click", () => {
-        setTimeout(() => window.URL.revokeObjectURL(url), 1000)
-      })
-      a.click()
-    },
     saveXls() {
       console.log("click save..xls...")
-
-      const uri = "data:application/vnd.ms-excel;base64,"
-      const template =
-        '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
-      const base64 = (s) => {
-        return window.btoa(unescape(encodeURIComponent(s)))
-      }
-      const format = (s, c) => {
-        return s.replace(/{(\w+)}/g, function (m, p) {
-          return c[p]
-        })
-      }
-      const downloadURI = (uri, name) => {
-        var link = document.createElement("a")
-        link.download = name
-        link.href = uri
-        link.click()
-      }
-
-      const run = (table, name, fileName) => {
-        var ctx = {
-          worksheet: name || "Worksheet",
-          table: table.innerHTML
-        }
-        var resuri = uri + base64(format(template, ctx))
-        downloadURI(resuri, fileName)
-      }
-
       let table = document.getElementById("myTable")
-      run(table, "Осмотры", `Осмотр_${getTime("now", "d.m.y")}.xls`)
+      this.downloadFileXls(
+        table,
+        "Осмотры",
+        `Осмотр_${getTime("now", "d.m.y")}.xls`
+      )
     }
   }
 }

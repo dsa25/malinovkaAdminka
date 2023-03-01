@@ -26,6 +26,37 @@ export default function useInspections(props) {
     }
   }
 
+  const downloadFileXls = (table1, name1, filename1) => {
+    const uri = "data:application/vnd.ms-excel;base64,"
+    const template =
+      '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+    const base64 = (s) => {
+      return window.btoa(unescape(encodeURIComponent(s)))
+    }
+    const format = (s, c) => {
+      return s.replace(/{(\w+)}/g, function (m, p) {
+        return c[p]
+      })
+    }
+    const downloadURI = (uri, name) => {
+      var link = document.createElement("a")
+      link.download = name
+      link.href = uri
+      link.click()
+    }
+
+    const run = (table, name, fileName) => {
+      var ctx = {
+        worksheet: name || "Worksheet",
+        table: table.innerHTML
+      }
+      var resuri = uri + base64(format(template, ctx))
+      downloadURI(resuri, fileName)
+    }
+
+    run(table1, name1, filename1)
+  }
+
   const typeSort = ref("date")
   const sortedInspections = computed(() => {
     if (typeSort.value == "date") {
@@ -87,6 +118,7 @@ export default function useInspections(props) {
     getEmptySectors,
     listDuplicate,
     listSectors,
+    downloadFileXls,
     getInspections
   }
 }
