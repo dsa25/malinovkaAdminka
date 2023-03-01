@@ -6,14 +6,14 @@
           <div>
             <MyInput
               :type="'date'"
-              min="2023-01-01"
+              min="2022-10-28"
               v-model="fromDate"
               id="from"
             />
             <MyInput
               class="mt-2"
               :type="'date'"
-              min="2023-01-02"
+              min="2022-10-30"
               v-model="beforeDate"
               id="before"
             />
