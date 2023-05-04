@@ -15,8 +15,10 @@ dist
 dist-ssr
 *.local
 
+
 .env
 .env.production
+
 database/malina.db
 
 # Editor directories and files
