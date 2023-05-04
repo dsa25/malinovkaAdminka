@@ -15,6 +15,7 @@ dist
 dist-ssr
 *.local
 
+pwa
 
 .env
 .env.production

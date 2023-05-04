@@ -3,10 +3,9 @@ const app = require("fastify")({ trustProxy: true, logger: false })
 // const { pool } = require("./database/connect")
 const { opn } = require("./database/connect")
 
-// comment 0123
-const PORT = 5000
-const IP = "0.0.0.0"
-// const IP = "localhost"
+const PORT = process.env.PORT || 5000
+const IP = process.env.IP || "0.0.0.0"
+// const IP = process.env.IP || "localhost"
 
 const userController = require("./controllers/userController")
 const sectorController = require("./controllers/sectorController")
@@ -28,8 +27,8 @@ app.register(fastifyStatic, {
   decorateReply: false
 })
 app.register(fastifyStatic, {
-  root: path.join(__dirname, "/pwa/"),
-  prefix: "/malinovka",
+  root: path.join(__dirname, "/pwa"),
+  prefix: "/pwa/",
   decorateReply: false
 })
 
